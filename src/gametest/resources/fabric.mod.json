@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "buildup_groundscape_test",
+  "version": "1.0.0",
+  "name": "Buildup Groundscape Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": ["com.davidblackcn.test.GroundscapeGameTests", "com.davidblackcn.test.GroundscapeMapTests"],
+    "fabric-client-gametest": ["com.davidblackcn.test.GroundscapeClientTest"]
+  },
+  "depends": {"buildup_groundscape": "*"}
+}

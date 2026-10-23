@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:mycelium_sod_block",
+    "buildup_groundscape:mycelium_sod_patch",
+    "buildup_groundscape:mycelium_sod_slab",
+    "buildup_groundscape:mycelium_sod_stairs"
+  ]
+}

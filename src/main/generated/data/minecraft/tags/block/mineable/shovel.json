@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:grass_sod_block",
+    "buildup_groundscape:grass_sod_patch",
+    "buildup_groundscape:grass_sod_slab",
+    "buildup_groundscape:grass_sod_stairs",
+    "buildup_groundscape:mycelium_sod_block",
+    "buildup_groundscape:mycelium_sod_patch",
+    "buildup_groundscape:mycelium_sod_slab",
+    "buildup_groundscape:mycelium_sod_stairs",
+    "buildup_groundscape:podzol_sod_block",
+    "buildup_groundscape:podzol_sod_patch",
+    "buildup_groundscape:podzol_sod_slab",
+    "buildup_groundscape:podzol_sod_stairs"
+  ]
+}

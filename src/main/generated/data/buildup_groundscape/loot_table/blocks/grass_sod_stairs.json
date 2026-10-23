@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:survives_explosion"
+          },
+          "name": "buildup_groundscape:grass_sod_stairs"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "buildup_groundscape:blocks/grass_sod_stairs"
+}

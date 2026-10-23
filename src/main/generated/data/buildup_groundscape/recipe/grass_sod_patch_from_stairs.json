@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:grass_sod_stairs"
+  ],
+  "result": {
+    "count": 6,
+    "id": "buildup_groundscape:grass_sod_patch"
+  }
+}

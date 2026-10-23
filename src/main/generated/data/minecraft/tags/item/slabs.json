@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:grass_sod_slab",
+    "buildup_groundscape:mycelium_sod_slab",
+    "buildup_groundscape:podzol_sod_slab",
+    "buildup_groundscape:crimson_nylium_sod_slab",
+    "buildup_groundscape:warped_nylium_sod_slab"
+  ]
+}

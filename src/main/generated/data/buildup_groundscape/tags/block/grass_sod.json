@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:grass_sod_block",
+    "buildup_groundscape:grass_sod_patch",
+    "buildup_groundscape:grass_sod_slab",
+    "buildup_groundscape:grass_sod_stairs"
+  ]
+}

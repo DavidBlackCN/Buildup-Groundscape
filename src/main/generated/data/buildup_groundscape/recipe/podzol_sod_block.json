@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:podzol"
+  ],
+  "result": {
+    "count": 1,
+    "id": "buildup_groundscape:podzol_sod_block"
+  }
+}
