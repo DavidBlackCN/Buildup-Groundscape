@@ -20,7 +20,15 @@ public class BuildupGroundscapeClient implements ClientModInitializer {
 		for (var variant : GroundscapeBlocks.variants()) {
 			// Plant planes use index 1; non-grass sod faces remain untinted in their models.
 			BlockColorRegistry.register(List.of(variant.family().usesGrassTint()
-					? BlockTintSources.grass() : BlockTintSources.constant(-1), BlockTintSources.grass()), variant.patch());
+					? BlockTintSources.grass() : BlockTintSources.constant(-1), BlockTintSources.grass(), BlockTintSources.dryFoliage()), variant.patch());
 		}
-	}
+        for (var family : com.davidblackcn.registry.LeafFamily.values()) {
+            var tint = switch(family) {
+                case SPRUCE -> BlockTintSources.constant(-10380959);
+                case BIRCH -> BlockTintSources.constant(-8345771);
+                default -> family.tinted() ? BlockTintSources.foliage() : BlockTintSources.constant(-1);
+            };
+            BlockColorRegistry.register(List.of(tint), com.davidblackcn.registry.GroundscapeLeaves.get(family));
+        }
+    }
 }

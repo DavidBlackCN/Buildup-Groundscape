@@ -1,76 +1,5964 @@
 {
-  "variants": {
-    "layers=1,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_1_fern"
+  "multipart": [
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_1"
+      },
+      "when": {
+        "layers": "1"
+      }
     },
-    "layers=1,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_1_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "grass"
+      }
     },
-    "layers=1,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_1"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "fern"
+      }
     },
-    "layers=2,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_2_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "dandelion"
+      }
     },
-    "layers=2,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_2_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "poppy"
+      }
     },
-    "layers=2,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_2"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "blue_orchid"
+      }
     },
-    "layers=3,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_3_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "allium"
+      }
     },
-    "layers=3,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_3_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "azure_bluet"
+      }
     },
-    "layers=3,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_3"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "red_tulip"
+      }
     },
-    "layers=4,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_4_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "orange_tulip"
+      }
     },
-    "layers=4,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_4_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "white_tulip"
+      }
     },
-    "layers=4,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_4"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_tulip"
+      }
     },
-    "layers=5,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_5_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "oxeye_daisy"
+      }
     },
-    "layers=5,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_5_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "cornflower"
+      }
     },
-    "layers=5,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_5"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "lily_of_the_valley"
+      }
     },
-    "layers=6,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_6_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "torchflower"
+      }
     },
-    "layers=6,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_6_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "dead_bush"
+      }
     },
-    "layers=6,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_6"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "short_dry_grass"
+      }
     },
-    "layers=7,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_7_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "tall_dry_grass"
+      }
     },
-    "layers=7,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_7_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "bush"
+      }
     },
-    "layers=7,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_7"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_north_1"
+      }
     },
-    "layers=8,vegetation=fern": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_8_fern"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_north_2"
+      }
     },
-    "layers=8,vegetation=grass": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_8_grass"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_north_3"
+      }
     },
-    "layers=8,vegetation=none": {
-      "model": "buildup_groundscape:block/warped_nylium_sod_patch_8"
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_1"
+        }
+      ],
+      "when": {
+        "layers": "1",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_2"
+      },
+      "when": {
+        "layers": "2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_2"
+        }
+      ],
+      "when": {
+        "layers": "2",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_3"
+      },
+      "when": {
+        "layers": "3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_3"
+        }
+      ],
+      "when": {
+        "layers": "3",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_4"
+      },
+      "when": {
+        "layers": "4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_4"
+        }
+      ],
+      "when": {
+        "layers": "4",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_5"
+      },
+      "when": {
+        "layers": "5"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_5"
+        }
+      ],
+      "when": {
+        "layers": "5",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_6"
+      },
+      "when": {
+        "layers": "6"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_6"
+        }
+      ],
+      "when": {
+        "layers": "6",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_7"
+      },
+      "when": {
+        "layers": "7"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_7"
+        }
+      ],
+      "when": {
+        "layers": "7",
+        "vegetation": "pink_petals_west_4"
+      }
+    },
+    {
+      "apply": {
+        "model": "buildup_groundscape:block/warped_nylium_sod_patch_8"
+      },
+      "when": {
+        "layers": "8"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/grass_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/fern_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "fern"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dandelion_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "dandelion"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/poppy_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "poppy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/blue_orchid_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "blue_orchid"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/allium_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "allium"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/azure_bluet_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "azure_bluet"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/red_tulip_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "red_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/orange_tulip_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "orange_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/white_tulip_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "white_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_tulip_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_tulip"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/oxeye_daisy_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "oxeye_daisy"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/cornflower_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "cornflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/lily_of_the_valley_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "lily_of_the_valley"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/torchflower_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "torchflower"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/dead_bush_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "dead_bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/short_dry_grass_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "short_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/tall_dry_grass_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "tall_dry_grass"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/bush_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "bush"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_north_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_east_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_south_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/leaf_litter_west_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "leaf_litter_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_north_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_east_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_south_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/wildflowers_west_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "wildflowers_west_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_north_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_north_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_north_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_north_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_north_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_east_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_east_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_east_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_east_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_east_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_south_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_south_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_south_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_south_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_south_4"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_1_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_west_1"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_2_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_west_2"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_3_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_west_3"
+      }
+    },
+    {
+      "apply": [
+        {
+          "model": "buildup_groundscape:block/vegetation/pink_petals_west_4_8"
+        }
+      ],
+      "when": {
+        "layers": "8",
+        "vegetation": "pink_petals_west_4"
+      }
     }
-  }
+  ]
 }

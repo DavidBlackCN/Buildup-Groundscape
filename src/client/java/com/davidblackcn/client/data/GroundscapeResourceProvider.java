@@ -51,6 +51,8 @@ public final class GroundscapeResourceProvider implements DataProvider {
 			loot(family);
 			recipes(family);
 		}
+		plantModels();
+        leafResources(english, chinese);
 		asset("lang/en_us", english);
 		asset("lang/zh_cn", chinese);
 		tags();
@@ -66,22 +68,6 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		model(family, "block", mesh(family, List.of(new Box(0, 0, 0, 16, 16, 16))));
 		for (int layers = 1; layers <= 8; layers++) {
 			model(family, "patch_" + layers, mesh(family, List.of(new Box(0, 0, 0, 16, layers * 2, 16))));
-			for (String plant : List.of("grass", "fern")) {
-				JsonObject combined = mesh(family, List.of(new Box(0, 0, 0, 16, layers * 2, 16)));
-				combined.getAsJsonObject("textures").addProperty("plant", "minecraft:block/" + (plant.equals("grass") ? "short_grass" : plant));
-				int y = layers * 2;
-				// Original crossed planes, lifted to the actual patch top; native textures only.
-				for (boolean alongX : List.of(true, false)) {
-					JsonObject face = object("texture", "#plant", "uv", array(0, 0, 16, 16), "tintindex", 1);
-					combined.getAsJsonArray("elements").add(object(
-							"from", alongX ? array(1, y, 8) : array(8, y, 1),
-							"to", alongX ? array(15, y + 16, 8) : array(8, y + 16, 15),
-							"rotation", object("origin", array(8, y + 8, 8), "axis", "y", "angle", 45, "rescale", true),
-							"shade_direction_override", "up",
-							"faces", alongX ? object("north", face, "south", face) : object("west", face, "east", face)));
-				}
-				model(family, "patch_" + layers + "_" + plant, combined);
-			}
 		}
 		model(family, "slab", mesh(family, List.of(new Box(0, 0, 0, 16, 8, 16))));
 		model(family, "slab_top", mesh(family, List.of(new Box(0, 8, 0, 16, 16, 16))));
@@ -136,14 +122,17 @@ public final class GroundscapeResourceProvider implements DataProvider {
 
 	private void blockStates(SurfaceFamily family) {
 		if (family.hasSodBlock()) blockState(family, "block", object("", reference(family, "block")));
-		JsonObject layers = new JsonObject();
-		for (int count = 1; count <= 8; count++) {
-			layers.add("layers=" + count + ",vegetation=none", reference(family, "patch_" + count));
-			for (String plant : List.of("grass", "fern")) {
-				layers.add("layers=" + count + ",vegetation=" + plant, reference(family, "patch_" + count + "_" + plant));
-			}
-		}
-		blockState(family, "patch", layers);
+        JsonArray parts = new JsonArray();
+        for (int count = 1; count <= 8; count++) {
+            parts.add(object("when", object("layers", Integer.toString(count)), "apply", reference(family, "patch_" + count)));
+            for (var vegetation : com.davidblackcn.block.SodPatchBlock.Vegetation.values()) {
+                if (vegetation == com.davidblackcn.block.SodPatchBlock.Vegetation.NONE) continue;
+                parts.add(object("when", object("layers", Integer.toString(count), "vegetation", vegetation.getSerializedName()),
+                        "apply", plantReferences(vegetation, count)));
+            }
+        }
+        asset("blockstates/" + path(family, "patch"), object("multipart", parts));
+
 		blockState(family, "slab", object("type=bottom", reference(family, "slab"),
 				"type=top", reference(family, "slab_top"), "type=double", reference(family, "block")));
 		JsonObject stairs = new JsonObject();
@@ -326,12 +315,153 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		tag("minecraft", "block", "mineable/shovel", shovels);
 		tag("minecraft", "block", "mineable/pickaxe", pickaxes);
 		// Low patches occupy the candidate spawn cell as well as forming a surface below it.
-		tag("minecraft", "block", "prevent_mob_spawning_inside", patches);
+		for (var leaf : com.davidblackcn.registry.LeafFamily.values()) patches.add(NAMESPACE + ":" + leaf.path());
+        tag("minecraft", "block", "prevent_mob_spawning_inside", patches);
 	}
+
+    private static JsonObject nativeJson(String path) {
+        try (var stream = GroundscapeResourceProvider.class.getResourceAsStream("/assets/minecraft/" + path + ".json")) {
+            if (stream == null) throw new IllegalStateException("Missing native resource " + path);
+            return com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(stream, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        } catch (java.io.IOException e) { throw new java.io.UncheckedIOException(e); }
+    }
+
+    private static JsonObject resolvedModel(String id) {
+        String path = id.replace("minecraft:", "");
+        JsonObject child = nativeJson("models/" + path);
+        JsonObject result = child.has("parent") ? resolvedModel(child.get("parent").getAsString()) : new JsonObject();
+        for (var entry : child.entrySet()) {
+            if (entry.getKey().equals("parent")) continue;
+            if (entry.getKey().equals("textures") && result.has("textures")) {
+                for (var texture : entry.getValue().getAsJsonObject().entrySet()) result.getAsJsonObject("textures").add(texture.getKey(), texture.getValue());
+            } else result.add(entry.getKey(), entry.getValue().deepCopy());
+        }
+        return result;
+    }
+
+    private static List<JsonObject> nativePlantParts(com.davidblackcn.block.SodPatchBlock.Vegetation vegetation) {
+        var state = vegetation.plant();
+        String path = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
+        JsonObject json = nativeJson("blockstates/" + path);
+        List<JsonObject> result = new ArrayList<>();
+        if (json.has("variants")) result.add(json.getAsJsonObject("variants").getAsJsonObject(""));
+        else for (var element : json.getAsJsonArray("multipart")) {
+            JsonObject part = element.getAsJsonObject();
+            boolean matches = true;
+            if (part.has("when")) for (var condition : part.getAsJsonObject("when").entrySet()) {
+                var property = state.getBlock().getStateDefinition().getProperty(condition.getKey());
+                if (property == null || !List.of(condition.getValue().getAsString().split("\\|")).contains(state.getValue(property).toString().toLowerCase(java.util.Locale.ROOT))) matches = false;
+            }
+            if (matches) result.add(part.getAsJsonObject("apply"));
+        }
+        return result;
+    }
+
+    private JsonArray plantReferences(com.davidblackcn.block.SodPatchBlock.Vegetation vegetation, int layers) {
+        // One exact-state model composes all native pieces and is shared by every ground material.
+        return array(object("model", NAMESPACE + ":block/vegetation/" + vegetation.getSerializedName() + "_" + layers));
+    }
+
+    private void plantModels() {
+        for (var vegetation : com.davidblackcn.block.SodPatchBlock.Vegetation.values()) {
+            if (vegetation == com.davidblackcn.block.SodPatchBlock.Vegetation.NONE) continue;
+            for (int layers = 1; layers <= 8; layers++) {
+                JsonArray elements = new JsonArray();
+                JsonObject textures = new JsonObject();
+                int partNumber = 0;
+                for (JsonObject part : nativePlantParts(vegetation)) {
+                    JsonObject model = resolvedModel(part.get("model").getAsString());
+                    String prefix = "p" + partNumber++ + "_";
+                    for (var texture : model.getAsJsonObject("textures").entrySet()) {
+                        String value = texture.getValue().getAsString();
+                        textures.addProperty(prefix + texture.getKey(), value.startsWith("#") ? "#" + prefix + value.substring(1) : value);
+                    }
+                    int turns = part.has("y") ? part.get("y").getAsInt() / 90 : 0;
+                    for (var raw : model.getAsJsonArray("elements")) {
+                        JsonObject element = raw.getAsJsonObject().deepCopy();
+                        JsonArray from = element.getAsJsonArray("from"), to = element.getAsJsonArray("to");
+                        for (int turn = 0; turn < turns; turn++) {
+                            double x0 = from.get(0).getAsDouble(), x1 = to.get(0).getAsDouble();
+                            from.set(0, json(16 - to.get(2).getAsDouble())); to.set(0, json(16 - from.get(2).getAsDouble()));
+                            from.set(2, json(x0)); to.set(2, json(x1));
+                            JsonObject oldFaces = element.getAsJsonObject("faces"), newFaces = new JsonObject();
+                            for (var face : oldFaces.entrySet()) {
+                                String direction = switch (face.getKey()) { case "north" -> "east"; case "east" -> "south"; case "south" -> "west"; case "west" -> "north"; default -> face.getKey(); };
+                                JsonObject value = face.getValue().getAsJsonObject();
+                                if (direction.equals("up") || direction.equals("down")) value.addProperty("rotation", ((value.has("rotation") ? value.get("rotation").getAsInt() : 0) + (direction.equals("up") ? 90 : 270)) % 360);
+                                newFaces.add(direction, value);
+                            }
+                            element.add("faces", newFaces);
+                            if (element.has("rotation")) {
+                                var rotation = element.getAsJsonObject("rotation");
+                                var origin = rotation.getAsJsonArray("origin");
+                                double ox = origin.get(0).getAsDouble();
+                                origin.set(0, json(16 - origin.get(2).getAsDouble())); origin.set(2, json(ox));
+                                String axis = rotation.get("axis").getAsString();
+                                if (axis.equals("x")) rotation.addProperty("axis", "z");
+                                else if (axis.equals("z")) { rotation.addProperty("axis", "x"); rotation.addProperty("angle", -rotation.get("angle").getAsDouble()); }
+                            }
+                        }
+                        from.set(1, json(from.get(1).getAsDouble() + layers * 2));
+                        to.set(1, json(to.get(1).getAsDouble() + layers * 2));
+                        if (element.has("rotation")) {
+                            var origin = element.getAsJsonObject("rotation").getAsJsonArray("origin");
+                            origin.set(1, json(origin.get(1).getAsDouble() + layers * 2));
+                        }
+                        for (var face : element.getAsJsonObject("faces").entrySet()) {
+                            JsonObject f = face.getValue().getAsJsonObject();
+                            f.addProperty("texture", "#" + prefix + f.get("texture").getAsString().substring(1));
+                            f.remove("cullface");
+                            if (f.has("tintindex")) f.addProperty("tintindex", vegetation.plant().is(net.minecraft.world.level.block.Blocks.LEAF_LITTER) ? 2 : 1);
+                        }
+                        elements.add(element);
+                    }
+                }
+                textures.addProperty("particle", "#p0_particle");
+                asset("models/block/vegetation/" + vegetation.getSerializedName() + "_" + layers,
+                        object("ambientocclusion", false, "textures", textures, "elements", elements));
+            }
+        }
+    }
+
+    private void leafResources(JsonObject english, JsonObject chinese) {
+        english.addProperty("tag.item." + NAMESPACE + ".leaf_patches", "Leaf Patches");
+        chinese.addProperty("tag.item." + NAMESPACE + ".leaf_patches", "树叶薄层");
+        String[] names = {"橡树", "云杉", "白桦", "丛林", "金合欢", "深色橡树", "红树", "樱花", "苍白橡树", "杜鹃", "盛开的杜鹃", "红色杨树", "橙色杨树", "黄色杨树"};
+        JsonArray leafTag = new JsonArray();
+        for (var family : com.davidblackcn.registry.LeafFamily.values()) {
+            String path = family.path(), id = NAMESPACE + ":" + path;
+            leafTag.add(id);
+            JsonObject variants = new JsonObject();
+            JsonArray alternatives = new JsonArray();
+            for (int n = 1; n <= 8; n++) {
+                JsonObject mesh = mesh(SurfaceFamily.GRASS, List.of(new Box(0, 0, 0, 16, n * 2, 16)));
+                mesh.getAsJsonObject("textures").addProperty("surface", "minecraft:block/" + family.id() + "_leaves");
+                if (!family.tinted()) for (var element : mesh.getAsJsonArray("elements")) for (var face : element.getAsJsonObject().getAsJsonObject("faces").entrySet()) face.getValue().getAsJsonObject().remove("tintindex");
+                asset("models/block/" + path + "_" + n, mesh);
+                variants.add("layers=" + n, object("model", NAMESPACE + ":block/" + path + "_" + n));
+                alternatives.add(object("type", "minecraft:item", "name", id, "condition", stateCondition(id, "layers", Integer.toString(n)),
+                        "modifier", array(object("type", "minecraft:set_count", "count", n), object("type", "minecraft:explosion_decay"))));
+            }
+            asset("blockstates/" + path, object("variants", variants));
+            JsonObject item = nativeJson("items/" + family.id() + "_leaves");
+            item.getAsJsonObject("model").addProperty("model", NAMESPACE + ":block/" + path + "_1");
+            asset("items/" + path, item);
+            String englishName = java.util.Arrays.stream(family.id().split("_")).map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1)).collect(java.util.stream.Collectors.joining(" "));
+            english.addProperty("block." + NAMESPACE + "." + path, englishName + " Leaves Patch");
+            chinese.addProperty("block." + NAMESPACE + "." + path, names[family.ordinal()] + "树叶薄层");
+            data("loot_table/blocks/" + path, object("type", "minecraft:block", "pools", array(object("rolls", 1, "entries", array(object("type", "minecraft:alternatives", "children", alternatives))))));
+            shapeless(path, "minecraft:" + family.id() + "_leaves", 1, id, 8);
+            shapeless(path + "_to_leaves", id, 8, "minecraft:" + family.id() + "_leaves", 1);
+        }
+        tag(NAMESPACE, "block", "leaf_patches", leafTag);
+        tag(NAMESPACE, "item", "leaf_patches", leafTag);
+        tag("minecraft", "block", "mineable/hoe", leafTag);
+    }
 
 	private void tag(String namespace, String registry, String name, JsonArray values) {
 		write("data/" + namespace + "/tags/" + registry + "/" + name,
-				object("replace", false, "values", values));
+				object("replace", false, "values", values.deepCopy()));
 	}
 
 	private void blockState(SurfaceFamily family, String form, JsonObject variants) {

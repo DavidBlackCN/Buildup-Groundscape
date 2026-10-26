@@ -14,6 +14,7 @@ public class BuildupGroundscape implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		GroundscapeBlocks.initialize();
+        com.davidblackcn.registry.GroundscapeLeaves.initialize();
 		GroundscapeWorldgen.initialize();
 		LOGGER.info("Registered {} Buildup Groundscape sod blocks", GroundscapeBlocks.allBlocks().size());
 	}

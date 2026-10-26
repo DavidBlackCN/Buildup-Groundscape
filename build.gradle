@@ -76,6 +76,23 @@ dependencies {
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 
+// Leaf-only controls prove the new feature remains independent of slope density.
+if (providers.gradleProperty('leafTest').isPresent()) {
+	def mode = providers.gradleProperty('leafTest').get()
+	if (!(mode in ['off', 'on', 'repeat'])) throw new GradleException('leafTest must be off, on, or repeat')
+	loom.runs.clientGameTest {
+		vmArg "-Dgroundscape.leafTest=$mode"
+		vmArg '-Dmax.bg.threads=1'
+	}
+	def config = layout.buildDirectory.file('run/clientGameTest/config/buildup_groundscape-worldgen.json').get().asFile
+	tasks.named('runClientGameTest') {
+		doFirst {
+			config.parentFile.mkdirs()
+			config.setText("{\"enabled\":true,\"density\":0,\"leafPatches\":{\"enabled\":${mode != 'off'}}}\n", 'UTF-8')
+		}
+	}
+}
+
 processResources {
 	exclude '.cache/**'
 	def version = project.version

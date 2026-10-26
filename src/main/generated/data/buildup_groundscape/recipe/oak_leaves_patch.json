@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:oak_leaves"
+  ],
+  "result": {
+    "count": 8,
+    "id": "buildup_groundscape:oak_leaves_patch"
+  }
+}

@@ -40,13 +40,13 @@ public record SodPatchFeature() implements Feature {
 	public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
 		GroundscapeWorldgenConfig config = GroundscapeWorldgenConfig.current();
 		// In particular, /place feature on a live ServerLevel must never retrofit old chunks.
-		if (!config.enabled() || config.density() == 0 || !(level instanceof WorldGenRegion region)) {
+		if (!config.enabled() || (config.density() == 0 && !config.leafPatches().active()) || !(level instanceof WorldGenRegion region)) {
 			return false;
 		}
 		ChunkPos center = region.getCenter();
 		// This overload requests EMPTY, not FULL or the in-progress FEATURES status.
 		ChunkAccess chunk = region.getChunk(center.x(), center.z());
-		if (!supportedDimension(region.getLevel()) || chunk.isUpgrading() || chunk.isOldNoiseGeneration()
+		if (!supportedDimension(region.getLevel()) || (config.density() == 0 && region.getLevel().dimension().equals(Level.NETHER)) || chunk.isUpgrading() || chunk.isOldNoiseGeneration()
 				|| chunk.getPersistedStatus().isOrAfter(ChunkStatus.FEATURES)) {
 			return false;
 		}
@@ -69,7 +69,7 @@ public record SodPatchFeature() implements Feature {
 		List<BoundingBox> bounds = chunk.getAttached(GroundscapeWorldgen.STRUCTURE_BOUNDS);
 		chunk.removeAttached(GroundscapeWorldgen.STRUCTURE_BOUNDS);
 		GroundscapeWorldgenConfig config = GroundscapeWorldgenConfig.current();
-		if (!config.enabled() || config.density() == 0 || !supportedDimension(level)
+		if (!config.enabled() || (config.density() == 0 && !config.leafPatches().active()) || !supportedDimension(level)
 				|| chunk.isUpgrading() || chunk.isOldNoiseGeneration()) {
 			return;
 		}
@@ -106,6 +106,8 @@ public record SodPatchFeature() implements Feature {
 		int candidates = 0;
 		int rejected = 0;
 		int placed = 0;
+        java.util.List<LeafCandidate> leaves = new java.util.ArrayList<>();
+        ReadBudget leafBudget = new ReadBudget(view);
 		for (int dx = 0; dx < 16 && !budget.exhausted(); dx++) {
 			for (int dz = 0; dz < 16 && !budget.exhausted(); dz++) {
 				int x = center.getMinBlockX() + dx;
@@ -116,13 +118,21 @@ public record SodPatchFeature() implements Feature {
 					int y = chunk.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, dx, dz) + 1;
 					BlockPos target = new BlockPos(x, y, z);
 					candidates++;
-					if (!StructureProtection.protects(bounds, target) && tryPlace(level, chunk, view, target, config, budget)) {
+					if (config.density() > 0 && !StructureProtection.protects(bounds, target) && tryPlace(level, chunk, view, target, config, budget)) {
 						placed++;
 					} else {
 						rejected++;
 					}
-				} else {
-					// A Nether heightmap points at the bedrock roof. Search only actual local
+                    if (config.leafPatches().active() && view.getBlockState(target).isAir()
+                            && !StructureProtection.protects(bounds, target)) {
+                        int layers = LeafPatchPlanner.layers(level.getSeed(), x, z, config.leafPatches());
+                        if (layers > 0 && SurfaceAnalyzer.analyze(view, target, leafBudget).accepted()) {
+                            var family = LeafPatchPlanner.canopy(view, target, leafBudget, config.leafPatches());
+                            if (family != null) leaves.add(new LeafCandidate(target, family, layers));
+                        }
+                    }
+                } else {
+                    // A Nether heightmap points at the bedrock roof. Search only actual local
 					// nylium faces below the dimension's logical ceiling, with a hard read cap.
 					int top = Math.min(chunk.getMaxY() - 3,
 							chunk.getMinY() + level.dimensionType().logicalHeight() - 1);
@@ -146,9 +156,20 @@ public record SodPatchFeature() implements Feature {
 				}
 			}
 		}
-		return new GenerationStatistics(columns, candidates, rejected, placed, budget.reads,
-				budget.exhausted(), false, System.nanoTime() - started);
+		leaves.sort(java.util.Comparator.comparingDouble(candidate -> LeafPatchPlanner.rank(level.getSeed(), candidate.pos())));
+        int leafCount = 0;
+        for (var candidate : leaves) {
+            if (leafCount >= config.leafPatches().maxPerChunk()) break;
+            if (!chunk.getBlockState(candidate.pos()).isAir()) continue;
+            var state = com.davidblackcn.registry.GroundscapeLeaves.get(candidate.family()).defaultBlockState()
+                    .setValue(com.davidblackcn.block.LeafPatchBlock.LAYERS, candidate.layers());
+            if (chunk.setBlockState(candidate.pos(), state, Block.UPDATE_CLIENTS) != null) leafCount++;
+        }
+        return new GenerationStatistics(columns, candidates, rejected, placed + leafCount, budget.reads + leafBudget.reads,
+				budget.exhausted() || leafBudget.exhausted(), false, System.nanoTime() - started);
 	}
+
+    private record LeafCandidate(BlockPos pos, com.davidblackcn.registry.LeafFamily family, int layers) { }
 
 	/** Metadata diagnostic and fallback for pre-1.3 pending chunks, not a current generation veto. */
 	public static boolean hasStructures(ChunkAccess chunk) {

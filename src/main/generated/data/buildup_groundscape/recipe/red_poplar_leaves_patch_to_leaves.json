@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:red_poplar_leaves"
+  }
+}

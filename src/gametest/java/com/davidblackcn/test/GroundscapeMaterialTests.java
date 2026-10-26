@@ -113,7 +113,7 @@ public final class GroundscapeMaterialTests {
             for (var plant : List.of(Blocks.SHORT_GRASS, Blocks.FERN)) {
                 h.getLevel().setBlock(h.absolutePos(target), plant.defaultBlockState(), Block.UPDATE_CLIENTS);
                 h.assertValueEqual(SurfaceAnalyzer.analyze(h.getLevel(), h.absolutePos(target), p -> true).accepted(),
-                        family.supportsVegetation(), "only soil families retain grass and fern");
+                        plant.defaultBlockState().canSurvive(h.getLevel(), h.absolutePos(target)), "native substrate predicate determines coexistence");
             }
             h.setBlock(target, Blocks.AIR);
             h.setBlock(target.east(), Blocks.WATER);

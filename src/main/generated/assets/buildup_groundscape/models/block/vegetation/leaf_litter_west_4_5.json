@@ -1,0 +1,46 @@
+{
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "rotation": 90,
+          "texture": "#p0_texture",
+          "tintindex": 2,
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ]
+        },
+        "up": {
+          "rotation": 270,
+          "texture": "#p0_texture",
+          "tintindex": 2,
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "from": [
+        0.0,
+        10.25,
+        0.0
+      ],
+      "to": [
+        16.0,
+        10.25,
+        16.0
+      ]
+    }
+  ],
+  "textures": {
+    "p0_particle": "#p0_texture",
+    "p0_texture": "minecraft:block/leaf_litter",
+    "particle": "#p0_particle"
+  }
+}

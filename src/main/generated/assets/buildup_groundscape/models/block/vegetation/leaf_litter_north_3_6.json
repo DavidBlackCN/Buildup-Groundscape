@@ -1,0 +1,80 @@
+{
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#p0_texture",
+          "tintindex": 2,
+          "uv": [
+            0,
+            16,
+            8,
+            0
+          ]
+        },
+        "up": {
+          "texture": "#p0_texture",
+          "tintindex": 2,
+          "uv": [
+            0,
+            0,
+            8,
+            16
+          ]
+        }
+      },
+      "from": [
+        0,
+        12.25,
+        0
+      ],
+      "to": [
+        8,
+        12.25,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#p1_texture",
+          "tintindex": 2,
+          "uv": [
+            8,
+            16,
+            16,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#p1_texture",
+          "tintindex": 2,
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ]
+        }
+      },
+      "from": [
+        8,
+        12.25,
+        8
+      ],
+      "to": [
+        16,
+        12.25,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "p0_particle": "#p0_texture",
+    "p0_texture": "minecraft:block/leaf_litter",
+    "p1_particle": "#p1_texture",
+    "p1_texture": "minecraft:block/leaf_litter",
+    "particle": "#p0_particle"
+  }
+}

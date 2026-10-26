@@ -15,6 +15,7 @@ from pathlib import Path
 NAMESPACE = "buildup_groundscape"
 LEGACY = ("grass", "mycelium", "podzol", "crimson_nylium", "warped_nylium")
 FAMILIES = LEGACY + ("sand", "dirt", "coarse_dirt", "red_sand", "gravel", "rooted_dirt")
+LEAVES = ("oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "pale_oak", "azalea", "flowering_azalea", "red_poplar", "orange_poplar", "yellow_poplar")
 FORMS = ("block", "patch", "slab", "stairs")
 DIRECTIONS = {
     "down": (0, -1, 0), "up": (0, 1, 0), "north": (0, 0, -1),
@@ -151,9 +152,9 @@ def loot_count(entry, state):
 def audit(root):
     assets = root / "assets" / NAMESPACE
     data = root / "data" / NAMESPACE
-    ids = {path(family, form) for family in FAMILIES for form in forms(family)}
+    ids = {path(family, form) for family in FAMILIES for form in forms(family)} | {f"{f}_leaves_patch" for f in LEAVES}
     for folder in (assets / "blockstates", assets / "items", data / "loot_table" / "blocks"):
-        check({p.stem for p in folder.glob("*.json")} == ids, f"38-variant coverage failed: {folder}")
+        check({p.stem for p in folder.glob("*.json")} == ids, f"52-variant coverage failed: {folder}")
     for language in ("en_us", "zh_cn"):
         entries = read(assets / "lang" / (language + ".json"))
         check(all(entries.get(f"block.{NAMESPACE}.{name}") for name in ids), f"Missing {language} name")
@@ -167,6 +168,13 @@ def audit(root):
         solid = dict(model, elements=[e for e in model["elements"] if "rotation" not in e])
         model_cache[f"{NAMESPACE}:block/{file.stem}"] = (model, cells(solid))
         exposed_faces(solid, model_cache[f"{NAMESPACE}:block/{file.stem}"][1])
+        leaf = next((f for f in LEAVES if file.stem.startswith(f + "_leaves_patch_")), None)
+        if leaf:
+            check(model["textures"]["surface"] == f"minecraft:block/{leaf}_leaves", "Wrong leaf texture")
+            tinted = leaf in {"oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove"}
+            for element in solid["elements"]:
+                for face in element["faces"].values(): check(face.get("tintindex") == (0 if tinted else None), "Wrong leaf tint")
+            continue
         family = next(f for f in sorted(FAMILIES, key=len, reverse=True) if file.stem.startswith(path(f, "")))
         texture = {
             "grass": "grass_block_top", "mycelium": "mycelium_top", "podzol": "podzol_top",
@@ -186,7 +194,18 @@ def audit(root):
                 check(plane["rotation"] == {"origin": [8, y + 8, 8], "axis": "y", "angle": 45, "rescale": True}, "Plant rotation mismatch")
                 check(all(f["texture"] == "#plant" and f["tintindex"] == 1 and f["uv"] == [0, 0, 16, 16]
                           and "cullface" not in f for f in plane["faces"].values()), "Plant tint/UV/culling mismatch")
-    check(len(model_cache) == 330, "Expected 154 bare and 176 vegetated models")
+    check(len(model_cache) == 266, "Expected 154 ground and 112 leaf models")
+    vegetation_models = list((assets / "models" / "block" / "vegetation").glob("*.json"))
+    check(len(vegetation_models) == 536, "All 67 supported plant states at eight heights")
+    for file in vegetation_models:
+        model = read(file)
+        height = int(file.stem.rsplit("_", 1)[1]) * 2
+        check(model["elements"], "Empty plant model")
+        for element in model["elements"]:
+            check(height <= element["from"][1] <= element["to"][1] <= height + 16, "Plant exceeds vertical bounds")
+            for face in element["faces"].values():
+                check("cullface" not in face, "Plant must not be culled by surrounding soil")
+                check(face.get("tintindex") in (None, 1, 2), "Plant tint overwrites soil tint")
 
     state_count = 0
     for family in FAMILIES:
@@ -198,8 +217,29 @@ def audit(root):
                 check(item["tints"] == [{"type": "minecraft:grass", "downfall": 1.0, "temperature": 0.5}], "Incorrect item grass tint")
             else:
                 check("tints" not in item, "Non-grass item must be untinted")
-            variants = read(assets / "blockstates" / (name + ".json"))["variants"]
-            check(len(variants) == {"block": 1, "patch": 24, "slab": 3, "stairs": 40}[form], "Incomplete state variants")
+            definition = read(assets / "blockstates" / (name + ".json"))
+            if form == "patch":
+                parts = definition["multipart"]
+                check(len(parts) == 544, "Eight base plus 536 plant state models")
+                variants = {}
+                seen = set()
+                for part in parts:
+                    condition = part["when"]
+                    layer = condition["layers"]
+                    if "vegetation" not in condition:
+                        variants[f"layers={layer},vegetation=none"] = part["apply"]
+                    else:
+                        key = (layer, condition["vegetation"])
+                        check(key not in seen, "Duplicate plant multipart")
+                        seen.add(key)
+                        refs = part["apply"]
+                        check(len(refs) == 1, "No random model alternatives")
+                        expected = f"{NAMESPACE}:block/vegetation/{condition['vegetation']}_{layer}"
+                        check(refs[0]["model"] == expected, "Incorrect plant model mapping")
+                        check((assets / "models" / (expected.split(":")[1] + ".json")).exists(), "Missing plant model")
+                check(len(seen) == 536, "Incomplete plant states")
+            else: variants = definition["variants"]
+            check(len(variants) == {"block": 1, "patch": 8, "slab": 3, "stairs": 40}[form], "Incomplete state variants")
             for properties, variant in variants.items():
                 state = dict(part.split("=") for part in properties.split(",")) if properties else {}
                 check(variant["model"] in model_cache, "Missing referenced model")
@@ -235,9 +275,17 @@ def audit(root):
                 check(loot_count(entry, state) == expected, f"Incorrect loot count for {name}: {state}")
 
     recipes = list((data / "recipe").glob("*.json"))
-    check(len(recipes) == 82, "Expected all 82 crafting recipes")
+    check(len(recipes) == 110, "Expected all 110 crafting recipes")
     for file in recipes:
         recipe = read(file)
+        if "_leaves_patch" in file.stem:
+            family = next(f for f in LEAVES if file.stem.startswith(f + "_leaves_patch"))
+            patch_id = f"{NAMESPACE}:{family}_leaves_patch"
+            native_id = f"minecraft:{family}_leaves"
+            recovery = file.stem.endswith("_to_leaves")
+            check(recipe["ingredients"] == ([patch_id] * 8 if recovery else [native_id]), "Leaf recipe cost")
+            check(recipe["result"] == {"id": native_id if recovery else patch_id, "count": 1 if recovery else 8}, "Leaf recipe output")
+            continue
         if recipe["type"] == "minecraft:crafting_shaped":
             ingredients = [recipe["key"][letter] for row in recipe["pattern"] for letter in row if letter != " "]
         else:
@@ -256,9 +304,18 @@ def audit(root):
         values = read(root / "data" / "minecraft" / "tags" / "block" / "mineable" / (tool + ".json"))
         check(not values["replace"] and set(values["values"]) == {identifier(family, form) for family in families for form in forms(family)}, "Incorrect mining tags")
     no_spawn = read(root / "data" / "minecraft" / "tags" / "block" / "prevent_mob_spawning_inside.json")
-    check(not no_spawn["replace"] and set(no_spawn["values"]) == {identifier(family, "patch") for family in FAMILIES}, "Patch spawn-blocking tag incomplete")
+    check(not no_spawn["replace"] and set(no_spawn["values"]) == {identifier(family, "patch") for family in FAMILIES} | {f"{NAMESPACE}:{f}_leaves_patch" for f in LEAVES}, "Patch spawn-blocking tag incomplete")
     check(not list(root.rglob("*.png")), "Generated resources must not bundle textures")
-    print(f"PASS: 38 variants, 330 models including 176 plant composites, {state_count} geometry states (440 stairs rotations), 82 conserving recipes, 38 loot tables, 2 languages, tool/spawn tags.")
+    for family in LEAVES:
+        name = family + "_leaves_patch"
+        variants = read(assets / "blockstates" / (name + ".json"))["variants"]
+        check(len(variants) == 8, "Leaf layer variants")
+        entry = read(data / "loot_table" / "blocks" / (name + ".json"))["pools"][0]["entries"][0]
+        for n in range(1, 9):
+            model_id = variants[f"layers={n}"]["model"]
+            check(model_cache[model_id][1] == set(itertools.product(range(16), range(n * 2), range(16))), "Leaf collision geometry")
+            check(loot_count(entry, {"layers": str(n)}) == n, "Leaf layer loot")
+    print(f"PASS: 52 blocks, 266 base and 536 shared plant models, {state_count} ground geometry states, 112 leaf states, 110 conserving recipes, 52 loot tables.")
 
 
 def audit_native_resources(root, minecraft_client_jar):
@@ -272,7 +329,7 @@ def audit_native_resources(root, minecraft_client_jar):
                 expected = {k: v for k, v in vanilla[key].items() if k != "model"}
                 check(actual == expected, f"Native rotation mismatch: {family}[{key}]")
         entries = set(jar.namelist())
-        for file in (assets / "models" / "block").glob("*.json"):
+        for file in (assets / "models" / "block").rglob("*.json"):
             for texture in read(file)["textures"].values():
                 if not texture.startswith("#"):
                     namespace, texture_path = texture.split(":")

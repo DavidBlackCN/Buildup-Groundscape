@@ -38,7 +38,7 @@ public final class SurfaceNoise {
 		return a + (b - a) * t;
 	}
 
-	private static double unit(long seed, long x, long z) {
+	public static double unit(long seed, long x, long z) {
 		long hash = seed ^ x * 0x9E3779B97F4A7C15L ^ z * 0xC2B2AE3D27D4EB4FL;
 		hash = (hash ^ (hash >>> 30)) * 0xBF58476D1CE4E5B9L;
 		hash = (hash ^ (hash >>> 27)) * 0x94D049BB133111EBL;

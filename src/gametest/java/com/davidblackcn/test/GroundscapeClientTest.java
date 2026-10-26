@@ -33,8 +33,9 @@ import javax.imageio.ImageIO;
 public final class GroundscapeClientTest implements FabricClientGameTest {
     @Override
     public void runTest(ClientGameTestContext context) {
-        if (System.getProperty("groundscape.worldgenTest") != null) return;
+        if (System.getProperty("groundscape.worldgenTest") != null || System.getProperty("groundscape.leafTest") != null) return;
         context.runOnClient(client -> {
+            client.options.renderDistance().set(8);
             client.getWindow().setWidth(1280);
             client.getWindow().setHeight(720);
             client.gameRenderer.resize(1280, 720);
@@ -45,13 +46,15 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             save = world.getWorldSave();
             var server = world.getServer();
             var connection = world.getConnection();
-            server.runCommand("fill -4 4 -4 52 4 92 minecraft:stone");
+            server.runOnServer(s -> { s.getPlayerList().setViewDistance(8); for (int cx = -1; cx <= 8; cx++) for (int cz = -1; cz <= 8; cz++) s.overworld().getChunk(cx, cz); });
+            server.runCommand("fill -4 4 -4 80 4 80 minecraft:stone");
             server.runCommand("time set noon");
             server.runCommand("weather clear");
             server.runCommand("gamemode spectator @a");
-            server.runCommand("tp @a 24 40 96 180 32");
+            server.runCommand("tp @a 60 105 110 180 45");
             server.runOnServer(s -> {
                 int row = 0;
+                int globalState = 0;
                 for (var variant : GroundscapeBlocks.variants()) {
                     int column = 0;
                     for (var block : variant.blocks()) {
@@ -59,7 +62,9 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                         for (var state : block.getStateDefinition().getPossibleStates()) {
                             if (state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)
                                     && state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)) continue;
-                            var pos = new BlockPos(column % 25 * 2, 5, row * 8 + column / 25 * 2);
+                            int index = globalState++;
+                            var pos = new BlockPos(index % 40 * 2, 5 + index / 1600 * 20, index / 40 % 40 * 2);
+                            s.overworld().setBlock(pos.below(), Blocks.STONE.defaultBlockState(), 2);
                             s.overworld().setBlock(pos, state, 2);
                             showcase.put(pos, state);
                             column++;
@@ -68,57 +73,71 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                     row++;
                 }
             });
-            require(showcase.size() == 742, "Showcase includes every dry block state without overlaps");
-            context.waitTick();
+            require(showcase.size() == 6462, "Showcase includes every dry block state without overlaps");
+            context.waitTicks(20);
+            context.waitFor(client -> showcase.keySet().stream().allMatch(client.level::hasChunkAt), 1200);
             connection.waitForClientboundPackets();
-            connection.waitForChunksRender();
+            connection.waitForChunksRender(false);
             checkModels(context);
             checkStates(context, showcase);
             for (String biome : new String[]{"minecraft:plains", "minecraft:swamp", "minecraft:badlands"}) {
-                server.runCommand("fillbiome -4 0 -4 52 16 92 " + biome);
+                server.runCommand("fillbiome -4 0 -4 80 96 80 " + biome);
                 context.waitTicks(5);
                 connection.waitForClientboundPackets();
                 checkGrassTint(context, new BlockPos(0, 5, 0));
             }
             screenshot(context, "groundscape-showcase");
-            server.runCommand("fill 59 4 0 75 4 8 minecraft:grass_block");
-            server.runCommand("fillbiome 59 0 0 75 16 8 minecraft:plains");
+            server.runCommand("fill 90 4 0 116 4 26 minecraft:grass_block");
+            server.runCommand("fillbiome 90 0 0 116 16 26 minecraft:plains");
             server.runOnServer(s -> {
-                for (int i = 0; i < 4; i++) for (var vegetation : SodPatchBlock.Vegetation.values()) {
-                    var pos = new BlockPos(61 + i * 3, 5, 1 + vegetation.ordinal() * 3);
+                for (int i = 0; i < 1; i++) for (var vegetation : SodPatchBlock.Vegetation.values()) {
+                    var pos = new BlockPos(91 + vegetation.ordinal() % 9 * 3, 5, 1 + vegetation.ordinal() / 9 * 3);
                     var state = GroundscapeBlocks.get(SurfaceFamily.GRASS).patch().defaultBlockState()
-                            .setValue(SodPatchBlock.LAYERS, 1 + i * 2).setValue(SodPatchBlock.VEGETATION, vegetation);
+                            .setValue(SodPatchBlock.LAYERS, 3).setValue(SodPatchBlock.VEGETATION, vegetation);
                     s.overworld().setBlock(pos, state, 2); showcase.put(pos, state);
                 }
             });
-            server.runCommand("tp @a 66 9 15 180 27");
-            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender();
+            server.runCommand("tp @a 103 22 32 180 45");
+            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender(false);
             screenshot(context, "groundscape-vegetation");
-            server.runCommand("fill 60 4 18 82 4 48 minecraft:stone");
+            server.runCommand("fill 90 4 40 114 4 82 minecraft:stone");
+            server.runOnServer(s -> {
+                for (var family : com.davidblackcn.registry.LeafFamily.values()) for (int n = 1; n <= 8; n++) {
+                    var pos = new BlockPos(90 + (n - 1) * 3, 5, 40 + family.ordinal() * 3);
+                    var state = com.davidblackcn.registry.GroundscapeLeaves.get(family).defaultBlockState().setValue(com.davidblackcn.block.LeafPatchBlock.LAYERS, n);
+                    s.overworld().setBlock(pos, state, 2); showcase.put(pos, state);
+                }
+            });
+            server.runCommand("tp @a 102 26 92 180 40");
+            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender(false);
+            screenshot(context, "groundscape-leaf-patches");
+            server.runCommand("fill 90 4 90 114 4 122 minecraft:stone");
             server.runOnServer(s -> {
                 int row = 0;
                 for (var variant : GroundscapeBlocks.variants()) {
                     if (variant.family().hasSodBlock()) continue;
-                    int z = 20 + row++ * 5;
-                    s.overworld().setBlock(new BlockPos(62, 5, z), variant.family().vanillaBlock().defaultBlockState(), 2);
+                    int z = 92 + row++ * 5;
+                    s.overworld().setBlock(new BlockPos(92, 5, z), variant.family().vanillaBlock().defaultBlockState(), 2);
                     for (int i = 0; i < 6; i++) {
                         var state = i < 4 ? variant.patch().defaultBlockState().setValue(SodPatchBlock.LAYERS, 1 + i * 2)
                                 : i == 4 ? variant.slab().defaultBlockState() : variant.stairs().defaultBlockState();
-                        var pos = new BlockPos(65 + i * 3, 5, z);
+                        var pos = new BlockPos(95 + i * 3, 5, z);
                         s.overworld().setBlock(pos, state, 2); showcase.put(pos, state);
                     }
                 }
             });
-            server.runCommand("tp @a 71 23 60 180 38");
-            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender();
+            server.runCommand("tp @a 102 23 131 180 38");
+            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender(false);
             context.waitTicks(220); // Let transient login/game-mode messages fade before the visual evidence.
             screenshot(context, "groundscape-s2-materials");
-            server.runCommand("tp @a 24 40 96 180 32");
+            server.runCommand("tp @a 60 105 110 180 45");
             checkTexturePack(context, connection);
         }
         // Actual world close/reopen, not merely a codec round trip.
         try (var reopened = save.open()) {
-            reopened.getConnection().waitForChunksDownload();
+            reopened.getServer().runOnServer(s -> s.getPlayerList().setViewDistance(8));
+            context.waitTicks(20);
+            context.waitFor(client -> showcase.keySet().stream().allMatch(client.level::hasChunkAt), 1200);
             checkStates(context, showcase);
         }
 
@@ -136,7 +155,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                 });
                 context.waitTick();
                 connection.waitForClientboundPackets();
-                connection.waitForChunksDownload();
+                context.waitFor(client -> client.level.getBlockState(pos.below()).is(Blocks.STONE), 1200);
                 for (int layers = 1; layers <= 8; layers++) {
                     int previous = layers - 1;
                     context.runOnClient(client -> {
@@ -156,7 +175,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                 context.takeScreenshot("groundscape-dedicated-stacking");
             }
             try (var reconnected = server.connect()) {
-                reconnected.waitForChunksDownload();
+                context.waitFor(client -> client.level.getBlockState(pos).is(patch), 1200);
                 context.runOnClient(client -> require(client.level.getBlockState(pos).getValue(SodPatchBlock.LAYERS) == 8,
                         "Dedicated reconnect retains stack"));
                 // Real client prediction + START/STOP packets to a separate dedicated server.
@@ -206,6 +225,36 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                         }
                     }
                 }
+                for (String mode : new String[]{"survival", "creative"}) {
+                    server.runCommand("gamemode " + mode + " @a");
+                    for (var plantBlock : new net.minecraft.world.level.block.Block[]{Blocks.SHORT_GRASS, Blocks.WILDFLOWERS, Blocks.LEAF_LITTER}) {
+                        for (int n : new int[]{3, 8}) {
+                            server.runOnServer(s -> {
+                                s.overworld().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, new net.minecraft.world.phys.AABB(pos).inflate(4)).forEach(net.minecraft.world.entity.item.ItemEntity::discard);
+                                s.overworld().setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 3);
+                                s.overworld().setBlock(pos, patch.defaultBlockState().setValue(SodPatchBlock.LAYERS, n), 3);
+                                reconnected.getServerPlayer().getInventory().setSelectedItem(new ItemStack(plantBlock, 8));
+                            });
+                            context.waitTicks(6); reconnected.waitForClientboundPackets();
+                            int clicks = plantBlock instanceof net.minecraft.world.level.block.SegmentableBlock ? 4 : 1;
+                            for (int click = 0; click < clicks; click++) {
+                                context.runOnClient(client -> client.gameMode.useItemOn(client.player, InteractionHand.MAIN_HAND,
+                                        new BlockHitResult(Vec3.atCenterOf(pos).add(0, .49, 0), Direction.UP, pos, false)));
+                                reconnected.waitForServerboundPackets(); context.waitTicks(2); reconnected.waitForClientboundPackets();
+                            }
+                            server.runOnServer(s -> {
+                                var state = s.overworld().getBlockState(pos);
+                                require(state.getValue(SodPatchBlock.LAYERS) == n, "planting keeps height");
+                                var plant = n == 8 ? s.overworld().getBlockState(pos.above()) : state.getValue(SodPatchBlock.VEGETATION).plant();
+                                require(plant.is(plantBlock), "planting synchronizes native or contained plant");
+                                if (plantBlock instanceof net.minecraft.world.level.block.SegmentableBlock segments)
+                                    require(plant.getValue(segments.getSegmentAmountProperty()) == 4, "four decoration segments survive packet roundtrip");
+                                require(reconnected.getServerPlayer().getMainHandItem().getCount() == (mode.equals("creative") ? 8 : 8 - clicks), "native inventory consumption");
+                            });
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -214,7 +263,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
         Path directory = Path.of("").toAbsolutePath().normalize();
         while (directory != null && !Files.exists(directory.resolve("build.gradle"))) directory = directory.getParent();
         require(directory != null, "Cannot locate project directory");
-        Path evidence = directory.getParent().resolve("docs/evidence/plant-breaking");
+        Path evidence = directory.getParent().resolve("docs/evidence/vegetation-leaves");
         try { Files.createDirectories(evidence); } catch (IOException e) { throw new UncheckedIOException(e); }
         context.takeScreenshot(TestScreenshotOptions.of(name).withSize(1280, 720)
                 .withDestinationDir(evidence).disableCounterPrefix());
@@ -247,6 +296,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             for (var family : SurfaceFamily.values()) {
                 ImageIO.write(image, "png", textures.resolve(textureName(family) + ".png").toFile());
             }
+            for (var family : com.davidblackcn.registry.LeafFamily.values()) ImageIO.write(image, "png", textures.resolve(family.id() + "_leaves.png").toFile());
         } catch (IOException exception) {
             throw new UncheckedIOException(exception);
         }
@@ -271,6 +321,16 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                 for (var block : variant.blocks()) {
                     var model = client.getModelManager().getBlockStateModelSet().get(block.defaultBlockState());
                     require(model.particleMaterial().sprite().contents().name().equals(spriteId), "Sod model uses overridden vanilla sprite");
+                }
+            }
+        });
+        context.runOnClient(client -> {
+            for (var family : com.davidblackcn.registry.LeafFamily.values()) {
+                var texture = Identifier.withDefaultNamespace("textures/block/" + family.id() + "_leaves.png");
+                require(client.getResourceManager().getResource(texture).orElseThrow().sourcePackId().equals("file/groundscape-diagnostic"), "Leaf texture replacement");
+                for (var state : com.davidblackcn.registry.GroundscapeLeaves.get(family).getStateDefinition().getPossibleStates()) {
+                    var model = client.getModelManager().getBlockStateModelSet().get(state);
+                    require(model.particleMaterial().sprite().contents().name().equals(Identifier.withDefaultNamespace("block/" + family.id() + "_leaves")), "Leaf model uses native sprite");
                 }
             }
         });
@@ -299,6 +359,12 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
     private static void checkGrassTint(ClientGameTestContext context, BlockPos pos) {
         context.runOnClient(client -> {
             var colors = client.getBlockColors();
+            for (var family : com.davidblackcn.registry.LeafFamily.values()) {
+                var nativeState = family.source().defaultBlockState();
+                var patchState = com.davidblackcn.registry.GroundscapeLeaves.get(family).defaultBlockState();
+                if (family.tinted()) require(colors.getTintSource(nativeState, 0).colorInWorld(nativeState, client.level, pos)
+                        == colors.getTintSource(patchState, 0).colorInWorld(patchState, client.level, pos), "Native leaf tint " + family);
+            }
             var vanilla = Blocks.GRASS_BLOCK.defaultBlockState();
             int expected = colors.getTintSource(vanilla, 0).colorInWorld(vanilla, client.level, pos);
             for (var variant : GroundscapeBlocks.variants()) {
@@ -324,7 +390,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
 
     private static void checkStates(ClientGameTestContext context, Map<BlockPos, BlockState> expected) {
         context.runOnClient(client -> expected.forEach((pos, state) ->
-                require(client.level.getBlockState(pos).equals(state), "State mismatch at " + pos + ": " + state)));
+                require(client.level.getBlockState(pos).equals(state), "State mismatch at " + pos + ": expected " + state + " got " + client.level.getBlockState(pos))));
     }
 
     private static void require(boolean success, String message) {

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:spruce_leaves"
+  }
+}

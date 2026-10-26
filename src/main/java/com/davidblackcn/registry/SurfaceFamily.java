@@ -49,11 +49,6 @@ public enum SurfaceFamily {
 				: java.util.List.of("patch", "slab", "stairs");
 	}
 
-	public boolean supportsVegetation() {
-		return this == GRASS || this == MYCELIUM || this == PODZOL
-				|| this == DIRT || this == COARSE_DIRT || this == ROOTED_DIRT;
-	}
-
 	public boolean usesGrassTint() {
 		return this == GRASS;
 	}

@@ -54,7 +54,7 @@ public final class GroundscapeBlocks {
 
 	private static Variant registerFamily(SurfaceFamily family) {
 		Block block = family.hasSodBlock() ? register(family, "block", Block::new) : family.vanillaBlock();
-		SodPatchBlock patch = register(family, "patch", SodPatchBlock::new);
+		SodPatchBlock patch = register(family, "patch", properties -> new SodPatchBlock(properties, family.vanillaBlock()));
 		SlabBlock slab = register(family, "slab", SlabBlock::new);
 		SodStairsBlock stairs = register(family, "stairs", properties -> new SodStairsBlock(block.defaultBlockState(), properties));
 		return new Variant(family, block, patch, slab, stairs);

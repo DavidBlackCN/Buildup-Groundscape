@@ -20,7 +20,29 @@ import java.util.LinkedHashMap;
 /** Immutable startup settings. Experimental decoration is opt-in and never retro-generates. */
 public record GroundscapeWorldgenConfig(boolean enabled, double density, int maxLayers,
 		double slopeInfluence, double flatCoverage, double layerScale, double heightVariation,
-		Map<String, MaterialSettings> materials) {
+		Map<String, MaterialSettings> materials, LeafSettings leafPatches) {
+    public record LeafSettings(boolean enabled, double coverage, int maxLayers, int searchHeight, int maxPerChunk, Map<String, Boolean> types) {
+        public LeafSettings {
+            range("leaf coverage", coverage, 0, 0.04);
+            if (maxLayers < 1 || maxLayers > 2 || searchHeight < 1 || searchHeight > 32 || maxPerChunk < 0 || maxPerChunk > 32)
+                throw new IllegalArgumentException("Invalid leaf layer/search/count limit");
+            Map<String, Boolean> normalized = new LinkedHashMap<>();
+            for (var family : com.davidblackcn.registry.LeafFamily.values()) normalized.put(family.id(), true);
+            if (types == null) throw new IllegalArgumentException("leaf types must be an object");
+            for (var entry : types.entrySet()) {
+                if (!normalized.containsKey(entry.getKey()) || entry.getValue() == null) throw new IllegalArgumentException("Unknown leaf type");
+                normalized.put(entry.getKey(), entry.getValue());
+            }
+            types = java.util.Collections.unmodifiableMap(normalized);
+        }
+        public static LeafSettings defaults() { return new LeafSettings(false, 0.03, 2, 24, 8, Map.of()); }
+        public boolean active() { return enabled && coverage > 0 && maxPerChunk > 0; }
+    }
+    public GroundscapeWorldgenConfig(boolean enabled, double density, int maxLayers,
+            double slopeInfluence, double flatCoverage, double layerScale, double heightVariation, Map<String, MaterialSettings> materials) {
+        this(enabled, density, maxLayers, slopeInfluence, flatCoverage, layerScale, heightVariation, materials, LeafSettings.defaults());
+    }
+
 	private static final MaterialSettings DEFAULT_MATERIAL = new MaterialSettings(true, 1);
 	public record MaterialSettings(boolean enabled, double thicknessScale) {
 		public MaterialSettings { range("thicknessScale", thicknessScale, 0.5, 1.5); }
@@ -48,7 +70,8 @@ public record GroundscapeWorldgenConfig(boolean enabled, double density, int max
 	}
 
 	public GroundscapeWorldgenConfig {
-		Map<String, MaterialSettings> normalized = defaultMaterials();
+		if (leafPatches == null) throw new IllegalArgumentException("leafPatches must be an object");
+        Map<String, MaterialSettings> normalized = defaultMaterials();
 		if (materials == null) throw new IllegalArgumentException("materials must be an object");
 		for (var entry : materials.entrySet()) {
 			if (!normalized.containsKey(entry.getKey()) || entry.getValue() == null)
@@ -124,13 +147,44 @@ public record GroundscapeWorldgenConfig(boolean enabled, double density, int max
 					number(object, "slopeInfluence", defaults.slopeInfluence()),
 					number(object, "flatCoverage", defaults.flatCoverage()),
 					number(object, "layerScale", defaults.layerScale()),
-					number(object, "heightVariation", defaults.heightVariation()), readMaterials(object));
+					number(object, "heightVariation", defaults.heightVariation()), readMaterials(object), readLeaves(object));
 		} catch (IOException | IllegalArgumentException | com.google.gson.JsonParseException exception) {
 			BuildupGroundscape.LOGGER.error("Cannot read worldgen config {}; generation disabled: {}",
 					path, exception.getMessage());
 			return defaults();
 		}
 	}
+
+    private static LeafSettings readLeaves(JsonObject root) {
+        if (!root.has("leafPatches")) return LeafSettings.defaults();
+        if (!root.get("leafPatches").isJsonObject()) throw new IllegalArgumentException("leafPatches must be an object");
+        JsonObject object = root.getAsJsonObject("leafPatches");
+        for (String key : object.keySet()) if (!java.util.Set.of("enabled", "coverage", "maxLayers", "searchHeight", "maxPerChunk", "types").contains(key))
+            throw new IllegalArgumentException("Unknown leaf option: " + key);
+        LeafSettings defaults = LeafSettings.defaults();
+        boolean enabled = booleanValue(object, "enabled", defaults.enabled());
+        Map<String, Boolean> types = new LinkedHashMap<>();
+        if (object.has("types")) {
+            if (!object.get("types").isJsonObject()) throw new IllegalArgumentException("leaf types must be an object");
+            var values = object.getAsJsonObject("types");
+            for (String key : values.keySet()) types.put(key, booleanValue(values, key, true));
+        }
+        return new LeafSettings(enabled, number(object, "coverage", defaults.coverage()),
+                integer(object, "maxLayers", defaults.maxLayers()), integer(object, "searchHeight", defaults.searchHeight()),
+                integer(object, "maxPerChunk", defaults.maxPerChunk()), types);
+    }
+    private static boolean booleanValue(JsonObject object, String name, boolean fallback) {
+        if (!object.has(name)) return fallback;
+        var value = object.get(name);
+        if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isBoolean()) throw new IllegalArgumentException(name + " must be boolean");
+        return value.getAsBoolean();
+    }
+    private static int integer(JsonObject object, String name, int fallback) {
+        double value = number(object, name, fallback);
+        if (!Double.isFinite(value) || value != Math.rint(value) || value < Integer.MIN_VALUE || value > Integer.MAX_VALUE)
+            throw new IllegalArgumentException(name + " must be an integer");
+        return (int) value;
+    }
 
 	private static Map<String, MaterialSettings> readMaterials(JsonObject object) {
 		Map<String, MaterialSettings> result = defaultMaterials();

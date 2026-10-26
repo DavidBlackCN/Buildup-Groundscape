@@ -259,7 +259,7 @@ public final class GroundscapeWorldgenTests {
 
     @GameTest
     public void plantsSnowFluidsBlockEntitiesAndHeadroomAreNotOverwritten(GameTestHelper helper) {
-        for (Block obstacle : List.of(Blocks.TALL_GRASS, Blocks.DANDELION, Blocks.SNOW, Blocks.CHEST, Blocks.WATER,
+        for (Block obstacle : List.of(Blocks.TALL_GRASS, Blocks.WITHER_ROSE, Blocks.SNOW, Blocks.CHEST, Blocks.WATER,
                 Blocks.LAVA, Blocks.STONE)) {
             preparePlateau(helper, SurfaceFamily.GRASS);
             helper.setBlock(TARGET, obstacle);

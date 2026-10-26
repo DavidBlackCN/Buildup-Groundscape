@@ -101,7 +101,7 @@ public final class SurfaceAnalyzer {
 		if (profile == null) {
 			return reject(Rejection.UNKNOWN_SURFACE);
 		}
-		if (SodPatchBlock.canContain(destination) && !profile.family().supportsVegetation()) {
+		if (SodPatchBlock.canContain(destination) && !com.davidblackcn.block.PlantSupport.accepts(destination, ground, level, groundPos)) {
 			return reject(Rejection.OCCUPIED);
 		}
 		if (!isFullNaturalSupport(level, groundPos, ground)) {
@@ -147,7 +147,7 @@ public final class SurfaceAnalyzer {
 
 	/** Earlier decorations by this mod must not change neighbouring decisions. */
 	public static boolean isAirBeforeDecoration(BlockState state) {
-		return state.isAir() || state.getBlock() instanceof SodPatchBlock;
+		return state.isAir() || state.getBlock() instanceof SodPatchBlock || state.getBlock() instanceof com.davidblackcn.block.LeafPatchBlock;
 	}
 
 	private static BlockState read(BlockGetter level, BlockPos pos, Predicate<BlockPos> canRead) {

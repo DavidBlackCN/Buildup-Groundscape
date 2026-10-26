@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:flowering_azalea_leaves"
+  ],
+  "result": {
+    "count": 8,
+    "id": "buildup_groundscape:flowering_azalea_leaves_patch"
+  }
+}
