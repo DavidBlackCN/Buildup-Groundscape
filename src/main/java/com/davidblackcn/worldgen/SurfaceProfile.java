@@ -29,7 +29,9 @@ public record SurfaceProfile(SurfaceFamily family, double coverageScale) {
 		}
 		String name = key.get().identifier().getPath();
 		if (biome.value().getBaseTemperature() < 0.15F || name.contains("snow") || name.contains("frozen")
-				|| name.contains("ocean") || name.contains("river") || name.contains("beach")
+				|| name.contains("ocean") || name.contains("river")
+				|| (name.contains("beach") && !ground.is(net.minecraft.world.level.block.Blocks.SAND)
+						&& !ground.is(net.minecraft.world.level.block.Blocks.GRAVEL))
 				|| name.contains("cave") || name.equals("grove") || name.equals("jagged_peaks")
 				|| name.equals("deep_dark") || name.startsWith("end_") || name.equals("the_end")) {
 			return Optional.empty();
@@ -37,7 +39,7 @@ public record SurfaceProfile(SurfaceFamily family, double coverageScale) {
 		for (SurfaceFamily family : SurfaceFamily.values()) {
 			if (!ground.is(family.vanillaBlock())) continue;
 			double scale = switch (family) {
-				case GRASS -> 1.0;
+				case GRASS, SAND, DIRT, COARSE_DIRT, RED_SAND, GRAVEL, ROOTED_DIRT -> 1.0;
 				case MYCELIUM -> 0.8;
 				case PODZOL -> 0.75;
 				case CRIMSON_NYLIUM, WARPED_NYLIUM -> 0.65;

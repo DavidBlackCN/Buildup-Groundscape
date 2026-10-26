@@ -29,7 +29,7 @@ public final class GroundscapeBlocks {
 
 	public record Variant(SurfaceFamily family, Block block, SodPatchBlock patch, SlabBlock slab, SodStairsBlock stairs) {
 		public List<Block> blocks() {
-			return List.of(block, patch, slab, stairs);
+			return family.hasSodBlock() ? List.of(block, patch, slab, stairs) : List.of(patch, slab, stairs);
 		}
 	}
 
@@ -53,7 +53,7 @@ public final class GroundscapeBlocks {
 	}
 
 	private static Variant registerFamily(SurfaceFamily family) {
-		Block block = register(family, "block", Block::new);
+		Block block = family.hasSodBlock() ? register(family, "block", Block::new) : family.vanillaBlock();
 		SodPatchBlock patch = register(family, "patch", SodPatchBlock::new);
 		SlabBlock slab = register(family, "slab", SlabBlock::new);
 		SodStairsBlock stairs = register(family, "stairs", properties -> new SodStairsBlock(block.defaultBlockState(), properties));
@@ -62,7 +62,7 @@ public final class GroundscapeBlocks {
 
 	private static <T extends Block> T register(SurfaceFamily family, String shape,
 			Function<BlockBehaviour.Properties, T> factory) {
-		Identifier id = BuildupGroundscape.id(family.id() + "_sod_" + shape);
+		Identifier id = BuildupGroundscape.id(family.path(shape));
 		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
 		T block = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(family.properties().setId(blockKey)));
 		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);

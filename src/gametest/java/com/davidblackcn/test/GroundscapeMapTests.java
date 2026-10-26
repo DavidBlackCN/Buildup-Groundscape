@@ -19,26 +19,25 @@ import java.util.List;
 /** Exercises vanilla terrain sampling and its final map pixel buffer, not only block properties. */
 public final class GroundscapeMapTests {
     @GameTest(maxTicks = 100)
-    public void allTwentyVariantsRasterizeWithTheirVanillaMapMaterial(GameTestHelper helper) {
+    public void allThirtyEightVariantsRasterizeWithTheirVanillaMapMaterial(GameTestHelper helper) {
         List<Sample> samples = new ArrayList<>();
-        int row = 1;
+        int sampleIndex = 0;
         for (var variant : GroundscapeBlocks.variants()) {
-            int column = 1;
             for (Block block : variant.blocks()) {
-                BlockPos relative = new BlockPos(column++, 6, row);
+                BlockPos relative = new BlockPos(1 + sampleIndex % 7, 6, 1 + sampleIndex++ / 7);
                 placeSample(helper, relative, block);
                 samples.add(new Sample(helper.absolutePos(relative),
                         variant.family().vanillaBlock().defaultMapColor().id,
                         variant.family().id() + " " + block.getDescriptionId()));
             }
             // A separate physical vanilla column proves that the map scanner has a valid control.
-            BlockPos control = new BlockPos(column, 6, row++);
+            BlockPos control = new BlockPos(1 + sampleIndex % 7, 6, 1 + sampleIndex++ / 7);
             placeSample(helper, control, variant.family().vanillaBlock());
             samples.add(new Sample(helper.absolutePos(control),
                     variant.family().vanillaBlock().defaultMapColor().id,
                     variant.family().id() + " vanilla control"));
         }
-        helper.assertValueEqual(samples.size(), 25, "twenty sod samples and five native controls");
+        helper.assertValueEqual(samples.size(), 49, "thirty-eight variants and eleven native controls");
 
         // Scale zero maps one terrain column to one pixel. A fixture can straddle vanilla's
         // 128-block map boundary, so keep as many actual maps as required to cover the samples.

@@ -20,6 +20,24 @@
     "buildup_groundscape:warped_nylium_sod_block",
     "buildup_groundscape:warped_nylium_sod_patch",
     "buildup_groundscape:warped_nylium_sod_slab",
-    "buildup_groundscape:warped_nylium_sod_stairs"
+    "buildup_groundscape:warped_nylium_sod_stairs",
+    "buildup_groundscape:sand_patch",
+    "buildup_groundscape:sand_slab",
+    "buildup_groundscape:sand_stairs",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_slab",
+    "buildup_groundscape:dirt_stairs",
+    "buildup_groundscape:coarse_dirt_patch",
+    "buildup_groundscape:coarse_dirt_slab",
+    "buildup_groundscape:coarse_dirt_stairs",
+    "buildup_groundscape:red_sand_patch",
+    "buildup_groundscape:red_sand_slab",
+    "buildup_groundscape:red_sand_stairs",
+    "buildup_groundscape:gravel_patch",
+    "buildup_groundscape:gravel_slab",
+    "buildup_groundscape:gravel_stairs",
+    "buildup_groundscape:rooted_dirt_patch",
+    "buildup_groundscape:rooted_dirt_slab",
+    "buildup_groundscape:rooted_dirt_stairs"
   ]
 }

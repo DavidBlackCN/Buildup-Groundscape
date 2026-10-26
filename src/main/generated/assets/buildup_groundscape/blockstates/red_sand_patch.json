@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "layers=1,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_1_fern"
+    },
+    "layers=1,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_1_grass"
+    },
+    "layers=1,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_1"
+    },
+    "layers=2,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_2_fern"
+    },
+    "layers=2,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_2_grass"
+    },
+    "layers=2,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_2"
+    },
+    "layers=3,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_3_fern"
+    },
+    "layers=3,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_3_grass"
+    },
+    "layers=3,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_3"
+    },
+    "layers=4,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_4_fern"
+    },
+    "layers=4,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_4_grass"
+    },
+    "layers=4,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_4"
+    },
+    "layers=5,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_5_fern"
+    },
+    "layers=5,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_5_grass"
+    },
+    "layers=5,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_5"
+    },
+    "layers=6,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_6_fern"
+    },
+    "layers=6,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_6_grass"
+    },
+    "layers=6,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_6"
+    },
+    "layers=7,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_7_fern"
+    },
+    "layers=7,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_7_grass"
+    },
+    "layers=7,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_7"
+    },
+    "layers=8,vegetation=fern": {
+      "model": "buildup_groundscape:block/red_sand_patch_8_fern"
+    },
+    "layers=8,vegetation=grass": {
+      "model": "buildup_groundscape:block/red_sand_patch_8_grass"
+    },
+    "layers=8,vegetation=none": {
+      "model": "buildup_groundscape:block/red_sand_patch_8"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:red_sand_patch",
+    "buildup_groundscape:red_sand_slab",
+    "buildup_groundscape:red_sand_stairs"
+  ]
+}

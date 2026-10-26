@@ -1,6 +1,7 @@
 package com.davidblackcn.worldgen;
 
 import com.davidblackcn.BuildupGroundscape;
+import com.davidblackcn.registry.SurfaceFamily;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -13,16 +14,48 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 /** Immutable startup settings. Experimental decoration is opt-in and never retro-generates. */
 public record GroundscapeWorldgenConfig(boolean enabled, double density, int maxLayers,
-		double slopeInfluence, double flatCoverage, double layerScale, double heightVariation) {
+		double slopeInfluence, double flatCoverage, double layerScale, double heightVariation,
+		Map<String, MaterialSettings> materials) {
+	private static final MaterialSettings DEFAULT_MATERIAL = new MaterialSettings(true, 1);
+	public record MaterialSettings(boolean enabled, double thicknessScale) {
+		public MaterialSettings { range("thicknessScale", thicknessScale, 0.5, 1.5); }
+	}
+
+	public GroundscapeWorldgenConfig(boolean enabled, double density, int maxLayers,
+			double slopeInfluence, double flatCoverage, double layerScale, double heightVariation) {
+		this(enabled, density, maxLayers, slopeInfluence, flatCoverage, layerScale, heightVariation, defaultMaterials());
+	}
+
+	private static Map<String, MaterialSettings> defaultMaterials() {
+		Map<String, MaterialSettings> result = new LinkedHashMap<>();
+		for (SurfaceFamily family : SurfaceFamily.values()) {
+			if (!family.hasSodBlock()) result.put(family.id(), DEFAULT_MATERIAL);
+		}
+		return result;
+	}
+
+	public MaterialSettings material(SurfaceFamily family) {
+		return materials.getOrDefault(family.id(), DEFAULT_MATERIAL);
+	}
 	/** Existing three-field configurations retain their explicit layer cap. */
 	public GroundscapeWorldgenConfig(boolean enabled, double density, int maxLayers) {
 		this(enabled, density, maxLayers, 0.55, 0.10, 1.0, 0.35);
 	}
 
 	public GroundscapeWorldgenConfig {
+		Map<String, MaterialSettings> normalized = defaultMaterials();
+		if (materials == null) throw new IllegalArgumentException("materials must be an object");
+		for (var entry : materials.entrySet()) {
+			if (!normalized.containsKey(entry.getKey()) || entry.getValue() == null)
+				throw new IllegalArgumentException("Unknown or null material: " + entry.getKey());
+			normalized.put(entry.getKey(), entry.getValue());
+		}
+		materials = java.util.Collections.unmodifiableMap(normalized);
 		if (!Double.isFinite(density) || density < 0 || density > 0.35) {
 			throw new IllegalArgumentException("density must be between 0 and 0.35");
 		}
@@ -91,12 +124,36 @@ public record GroundscapeWorldgenConfig(boolean enabled, double density, int max
 					number(object, "slopeInfluence", defaults.slopeInfluence()),
 					number(object, "flatCoverage", defaults.flatCoverage()),
 					number(object, "layerScale", defaults.layerScale()),
-					number(object, "heightVariation", defaults.heightVariation()));
+					number(object, "heightVariation", defaults.heightVariation()), readMaterials(object));
 		} catch (IOException | IllegalArgumentException | com.google.gson.JsonParseException exception) {
 			BuildupGroundscape.LOGGER.error("Cannot read worldgen config {}; generation disabled: {}",
 					path, exception.getMessage());
 			return defaults();
 		}
+	}
+
+	private static Map<String, MaterialSettings> readMaterials(JsonObject object) {
+		Map<String, MaterialSettings> result = defaultMaterials();
+		if (!object.has("materials")) return result;
+		if (!object.get("materials").isJsonObject()) throw new IllegalArgumentException("materials must be an object");
+		for (var entry : object.getAsJsonObject("materials").entrySet()) {
+			if (!result.containsKey(entry.getKey()) || !entry.getValue().isJsonObject())
+				throw new IllegalArgumentException("Unknown material or invalid settings: " + entry.getKey());
+			JsonObject settings = entry.getValue().getAsJsonObject();
+			for (String key : settings.keySet()) {
+				if (!key.equals("enabled") && !key.equals("thicknessScale"))
+					throw new IllegalArgumentException("Unknown material setting: " + key);
+			}
+			boolean enabled = true;
+			if (settings.has("enabled")) {
+				var value = settings.get("enabled");
+				if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isBoolean())
+					throw new IllegalArgumentException("material enabled must be boolean");
+				enabled = value.getAsBoolean();
+			}
+			result.put(entry.getKey(), new MaterialSettings(enabled, number(settings, "thicknessScale", 1)));
+		}
+		return result;
 	}
 
 	private static double number(JsonObject object, String name, double fallback) {

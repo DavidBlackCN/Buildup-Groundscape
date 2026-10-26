@@ -162,7 +162,7 @@ public final class GroundscapeWorldgenTests {
     @GameTest
     public void unknownMaterialsAndUnmappedForeignBiomesAreLeftAlone(GameTestHelper helper) {
         Holder<Biome> plains = biome(helper, Biomes.PLAINS);
-        List<Block> unknown = new ArrayList<>(List.of(Blocks.DIRT, Blocks.STONE, Blocks.FARMLAND, Blocks.DIRT_PATH));
+        List<Block> unknown = new ArrayList<>(List.of(Blocks.MUD, Blocks.STONE, Blocks.FARMLAND, Blocks.DIRT_PATH));
         unknown.addAll(GroundscapeBlocks.allBlocks());
         for (Block block : unknown) {
             helper.assertTrue(SurfaceProfile.forSurface(block.defaultBlockState(), plains).isEmpty(),
@@ -577,6 +577,10 @@ public final class GroundscapeWorldgenTests {
             case PODZOL -> Biomes.OLD_GROWTH_PINE_TAIGA;
             case CRIMSON_NYLIUM -> Biomes.CRIMSON_FOREST;
             case WARPED_NYLIUM -> Biomes.WARPED_FOREST;
+            case SAND -> Biomes.DESERT;
+            case RED_SAND -> Biomes.BADLANDS;
+            case GRAVEL -> Biomes.PLAINS;
+            default -> Biomes.PLAINS;
         };
     }
 

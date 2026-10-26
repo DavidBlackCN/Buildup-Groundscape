@@ -50,16 +50,16 @@ public final class GroundscapeGameTests {
     };
 
     @GameTest
-    public void allTwentyBlocksAndItemsAreRegistered(GameTestHelper helper) {
+    public void allThirtyEightBlocksAndItemsAreRegistered(GameTestHelper helper) {
         Set<Identifier> ids = new HashSet<>();
-        helper.assertValueEqual(GroundscapeBlocks.variants().size(), 5, "five material families");
+        helper.assertValueEqual(GroundscapeBlocks.variants().size(), 11, "eleven material families");
         for (var variant : GroundscapeBlocks.variants()) {
             List<Block> forms = forms(variant);
-            String[] suffixes = {"block", "patch", "slab", "stairs"};
+            var suffixes = variant.family().forms();
             for (int i = 0; i < forms.size(); i++) {
                 Block block = forms.get(i);
                 Identifier expected = Identifier.fromNamespaceAndPath("buildup_groundscape",
-                        variant.family().id() + "_sod_" + suffixes[i]);
+                        variant.family().path(suffixes.get(i)));
                 helper.assertValueEqual(BuiltInRegistries.BLOCK.getKey(block), expected, "stable block ID");
                 helper.assertTrue(ids.add(expected), "unique variant " + expected);
                 helper.assertTrue(block.asItem() instanceof BlockItem, "BlockItem for " + expected);
@@ -69,7 +69,7 @@ public final class GroundscapeGameTests {
                 helper.assertFalse(block.defaultBlockState().isRandomlyTicking(), "decorative sod does not propagate");
             }
         }
-        helper.assertValueEqual(ids.size(), 20, "twenty unique variants");
+        helper.assertValueEqual(ids.size(), 38, "thirty-eight unique variants");
         helper.succeed();
     }
 
@@ -366,7 +366,7 @@ public final class GroundscapeGameTests {
                 for (int layers = 1; layers <= 8; layers++) {
                     assertDrops(helper, variant.patch().defaultBlockState().setValue(BlockStateProperties.LAYERS, layers), absolute, tool, variant.patch(), layers);
                 }
-                assertDrops(helper, variant.block().defaultBlockState(), absolute, tool, variant.block(), 1);
+                if (variant.family().hasSodBlock()) assertDrops(helper, variant.block().defaultBlockState(), absolute, tool, variant.block(), 1);
                 assertDrops(helper, variant.stairs().defaultBlockState(), absolute, tool, variant.stairs(), 1);
                 for (SlabType type : SlabType.values()) {
                     assertDrops(helper, variant.slab().defaultBlockState().setValue(BlockStateProperties.SLAB_TYPE, type), absolute, tool, variant.slab(), type == SlabType.DOUBLE ? 2 : 1);
@@ -394,6 +394,7 @@ public final class GroundscapeGameTests {
     public void fullBlocksPlaceAsIndependentSurvivalItems(GameTestHelper helper) {
         Player player = player(helper, GameType.SURVIVAL);
         for (var variant : GroundscapeBlocks.variants()) {
+            if (!variant.family().hasSodBlock()) continue;
             resetCell(helper);
             ItemStack stack = new ItemStack(variant.block(), 2);
             helper.assertTrue(place(helper, player, stack, CELL.below(), Direction.UP).consumesAction(), "full block placement");
@@ -407,10 +408,10 @@ public final class GroundscapeGameTests {
     }
 
     @GameTest
-    public void allFortyRecipesLoadMatchAndConserveVolume(GameTestHelper helper) {
+    public void allEightyTwoRecipesLoadMatchAndConserveVolume(GameTestHelper helper) {
         for (var variant : GroundscapeBlocks.variants()) {
-            String prefix = variant.family().id() + "_sod_";
-            assertRecipe(helper, prefix + "block", CraftingInput.of(1, 1,
+            String prefix = variant.family().path("");
+            if (variant.family().hasSodBlock()) assertRecipe(helper, prefix + "block", CraftingInput.of(1, 1,
                     List.of(new ItemStack(variant.family().vanillaBlock()))), variant.block(), 1, 8, 8);
             assertRecipe(helper, prefix + "patch", CraftingInput.of(1, 1,
                     List.of(new ItemStack(variant.block()))), variant.patch(), 8, 8, 1);
@@ -435,7 +436,7 @@ public final class GroundscapeGameTests {
     }
 
     private static List<Block> forms(GroundscapeBlocks.Variant variant) {
-        return List.of(variant.block(), variant.patch(), variant.slab(), variant.stairs());
+        return variant.blocks();
     }
 
     private static BlockState stair(Block block, Direction facing, Half half) {

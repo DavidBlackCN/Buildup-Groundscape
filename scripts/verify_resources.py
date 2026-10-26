@@ -13,7 +13,8 @@ from pathlib import Path
 
 
 NAMESPACE = "buildup_groundscape"
-FAMILIES = ("grass", "mycelium", "podzol", "crimson_nylium", "warped_nylium")
+LEGACY = ("grass", "mycelium", "podzol", "crimson_nylium", "warped_nylium")
+FAMILIES = LEGACY + ("sand", "dirt", "coarse_dirt", "red_sand", "gravel", "rooted_dirt")
 FORMS = ("block", "patch", "slab", "stairs")
 DIRECTIONS = {
     "down": (0, -1, 0), "up": (0, 1, 0), "north": (0, 0, -1),
@@ -31,7 +32,15 @@ def read(path):
 
 
 def identifier(family, form):
-    return f"{NAMESPACE}:{family}_sod_{form}"
+    return f"{NAMESPACE}:{path(family, form)}"
+
+
+def forms(family):
+    return FORMS if family in LEGACY else FORMS[1:]
+
+
+def path(family, form):
+    return family + ("_sod_" if family in LEGACY else "_") + form
 
 
 def cells(model):
@@ -106,7 +115,7 @@ def unit_count(item):
     if not item.startswith(NAMESPACE + ":"):
         check(item in {"minecraft:" + ("grass_block" if f == "grass" else f) for f in FAMILIES}, "Unexpected recipe input")
         return 8
-    form = item.split("_sod_")[1]
+    form = item.rsplit("_", 1)[1]
     return {"block": 8, "patch": 1, "slab": 4, "stairs": 6}[form]
 
 
@@ -142,9 +151,9 @@ def loot_count(entry, state):
 def audit(root):
     assets = root / "assets" / NAMESPACE
     data = root / "data" / NAMESPACE
-    ids = {f"{family}_sod_{form}" for family in FAMILIES for form in FORMS}
+    ids = {path(family, form) for family in FAMILIES for form in forms(family)}
     for folder in (assets / "blockstates", assets / "items", data / "loot_table" / "blocks"):
-        check({p.stem for p in folder.glob("*.json")} == ids, f"20-variant coverage failed: {folder}")
+        check({p.stem for p in folder.glob("*.json")} == ids, f"38-variant coverage failed: {folder}")
     for language in ("en_us", "zh_cn"):
         entries = read(assets / "lang" / (language + ".json"))
         check(all(entries.get(f"block.{NAMESPACE}.{name}") for name in ids), f"Missing {language} name")
@@ -158,11 +167,11 @@ def audit(root):
         solid = dict(model, elements=[e for e in model["elements"] if "rotation" not in e])
         model_cache[f"{NAMESPACE}:block/{file.stem}"] = (model, cells(solid))
         exposed_faces(solid, model_cache[f"{NAMESPACE}:block/{file.stem}"][1])
-        family = file.stem.split("_sod_")[0]
+        family = next(f for f in sorted(FAMILIES, key=len, reverse=True) if file.stem.startswith(path(f, "")))
         texture = {
             "grass": "grass_block_top", "mycelium": "mycelium_top", "podzol": "podzol_top",
             "crimson_nylium": "crimson_nylium", "warped_nylium": "warped_nylium",
-        }[family]
+        }.get(family, family)
         check(model["textures"]["surface"] == f"minecraft:block/{texture}", "Non-vanilla texture")
         for element in solid["elements"]:
             for face in element["faces"].values():
@@ -177,12 +186,12 @@ def audit(root):
                 check(plane["rotation"] == {"origin": [8, y + 8, 8], "axis": "y", "angle": 45, "rescale": True}, "Plant rotation mismatch")
                 check(all(f["texture"] == "#plant" and f["tintindex"] == 1 and f["uv"] == [0, 0, 16, 16]
                           and "cullface" not in f for f in plane["faces"].values()), "Plant tint/UV/culling mismatch")
-    check(len(model_cache) == 150, "Expected 70 bare and 80 vegetated models")
+    check(len(model_cache) == 330, "Expected 154 bare and 176 vegetated models")
 
     state_count = 0
     for family in FAMILIES:
-        for form in FORMS:
-            name = f"{family}_sod_{form}"
+        for form in forms(family):
+            name = path(family, form)
             item = read(assets / "items" / (name + ".json"))["model"]
             check(item["model"] in model_cache and item["type"] == "minecraft:model", "Invalid item model")
             if family == "grass":
@@ -203,7 +212,7 @@ def audit(root):
                         end = int(state["layers"]) * 2
                         vegetation = state["vegetation"]
                         suffix = "" if vegetation == "none" else "_" + vegetation
-                        check(variant["model"] == f"{NAMESPACE}:block/{family}_sod_patch_{state['layers']}{suffix}", "Plant state/model mismatch")
+                        check(variant["model"] == f"{NAMESPACE}:block/{path(family, 'patch')}_{state['layers']}{suffix}", "Plant state/model mismatch")
                     elif form == "slab":
                         if state["type"] == "top":
                             start = 8
@@ -226,7 +235,7 @@ def audit(root):
                 check(loot_count(entry, state) == expected, f"Incorrect loot count for {name}: {state}")
 
     recipes = list((data / "recipe").glob("*.json"))
-    check(len(recipes) == 40, "Expected all 40 crafting recipes")
+    check(len(recipes) == 82, "Expected all 82 crafting recipes")
     for file in recipes:
         recipe = read(file)
         if recipe["type"] == "minecraft:crafting_shaped":
@@ -235,17 +244,21 @@ def audit(root):
             check(recipe["type"] == "minecraft:crafting_shapeless", "Unexpected crafting serializer")
             ingredients = recipe["ingredients"]
         result = recipe["result"]
-        check(result["id"].startswith(NAMESPACE + ":"), "Recipe converts sod back into vanilla blocks")
+        check(result["id"].startswith(NAMESPACE + ":") or result["id"] in {"minecraft:" + f for f in FAMILIES if f not in LEGACY}, "Unexpected vanilla recovery recipe")
+        families = {next(f for f in sorted(FAMILIES, key=len, reverse=True)
+                         if item == "minecraft:" + ("grass_block" if f == "grass" else f)
+                         or item.startswith(identifier(f, ""))) for item in ingredients + [result["id"]]}
+        check(len(families) == 1, "Recipe converts between materials")
         check(sum(unit_count(item) for item in ingredients) == unit_count(result["id"]) * result.get("count", 1), f"Sod conservation failed: {file.name}")
         advancement = read(data / "advancement" / "recipes" / "building_blocks" / file.name)
         check(advancement["rewards"]["recipes"] == [f"{NAMESPACE}:{file.stem}"], "Recipe unlock mismatch")
-    for tool, families in (("shovel", FAMILIES[:3]), ("pickaxe", FAMILIES[3:])):
+    for tool, families in (("shovel", FAMILIES[:3] + FAMILIES[5:]), ("pickaxe", FAMILIES[3:5])):
         values = read(root / "data" / "minecraft" / "tags" / "block" / "mineable" / (tool + ".json"))
-        check(not values["replace"] and set(values["values"]) == {identifier(family, form) for family in families for form in FORMS}, "Incorrect mining tags")
+        check(not values["replace"] and set(values["values"]) == {identifier(family, form) for family in families for form in forms(family)}, "Incorrect mining tags")
     no_spawn = read(root / "data" / "minecraft" / "tags" / "block" / "prevent_mob_spawning_inside.json")
     check(not no_spawn["replace"] and set(no_spawn["values"]) == {identifier(family, "patch") for family in FAMILIES}, "Patch spawn-blocking tag incomplete")
     check(not list(root.rglob("*.png")), "Generated resources must not bundle textures")
-    print(f"PASS: 20 variants, 150 models including 80 plant composites, {state_count} geometry states (200 stairs rotations), 40 conserving recipes, 20 loot tables, 2 languages, tool/spawn tags.")
+    print(f"PASS: 38 variants, 330 models including 176 plant composites, {state_count} geometry states (440 stairs rotations), 82 conserving recipes, 38 loot tables, 2 languages, tool/spawn tags.")
 
 
 def audit_native_resources(root, minecraft_client_jar):
@@ -253,7 +266,7 @@ def audit_native_resources(root, minecraft_client_jar):
     with zipfile.ZipFile(minecraft_client_jar) as jar:
         vanilla = json.loads(jar.read("assets/minecraft/blockstates/oak_stairs.json"))["variants"]
         for family in FAMILIES:
-            states = read(assets / "blockstates" / f"{family}_sod_stairs.json")["variants"]
+            states = read(assets / "blockstates" / (path(family, "stairs") + ".json"))["variants"]
             for key, variant in states.items():
                 actual = {k: v for k, v in variant.items() if k != "model"}
                 expected = {k: v for k, v in vanilla[key].items() if k != "model"}
@@ -262,9 +275,9 @@ def audit_native_resources(root, minecraft_client_jar):
         for file in (assets / "models" / "block").glob("*.json"):
             for texture in read(file)["textures"].values():
                 if not texture.startswith("#"):
-                    namespace, path = texture.split(":")
-                    check(f"assets/{namespace}/textures/{path}.png" in entries, f"Native texture missing: {texture}")
-    print("PASS: all 200 stair rotations/uvlock match native blockstates; every native texture reference exists.")
+                    namespace, texture_path = texture.split(":")
+                    check(f"assets/{namespace}/textures/{texture_path}.png" in entries, f"Native texture missing: {texture}")
+    print("PASS: all 440 stair rotations/uvlock match native blockstates; every native texture reference exists.")
 
 
 if __name__ == "__main__":

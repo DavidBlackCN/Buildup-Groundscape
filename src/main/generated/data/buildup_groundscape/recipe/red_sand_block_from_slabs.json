@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:red_sand_slab",
+    "buildup_groundscape:red_sand_slab"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:red_sand"
+  }
+}

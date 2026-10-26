@@ -5,6 +5,12 @@
     "buildup_groundscape:mycelium_sod_patch",
     "buildup_groundscape:podzol_sod_patch",
     "buildup_groundscape:crimson_nylium_sod_patch",
-    "buildup_groundscape:warped_nylium_sod_patch"
+    "buildup_groundscape:warped_nylium_sod_patch",
+    "buildup_groundscape:sand_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:coarse_dirt_patch",
+    "buildup_groundscape:red_sand_patch",
+    "buildup_groundscape:gravel_patch",
+    "buildup_groundscape:rooted_dirt_patch"
   ]
 }

@@ -122,7 +122,7 @@ public final class GroundscapeSlopeTests {
         Path root = Path.of("").toAbsolutePath();
         while (root != null && !Files.exists(root.resolve("build.gradle"))) root = root.getParent();
         if (root == null) throw new IOException("Project root not found");
-        Path file = root.getParent().resolve("docs/evidence/terrain-continuity/planner-metrics.json"); Files.createDirectories(file.getParent());
+        Path file = root.getParent().resolve("docs/evidence/s2/planner-metrics.json"); Files.createDirectories(file.getParent());
         Files.writeString(file, new GsonBuilder().setPrettyPrinting().create().toJson(Map.of(
                 "seed", SEED, "samples", 513 * 513, "flat_layers", flat, "slope_layers", slope,
                 "layer_scale_1_4", high, "maximum_adjacent_layer_delta", maxJump, "isolated_tall_proposals", isolated)) + "\n");

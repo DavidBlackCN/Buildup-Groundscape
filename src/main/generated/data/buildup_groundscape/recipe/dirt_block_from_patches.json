@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:dirt_patch"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:dirt"
+  }
+}

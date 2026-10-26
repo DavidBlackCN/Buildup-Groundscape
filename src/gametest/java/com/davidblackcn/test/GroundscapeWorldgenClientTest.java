@@ -83,7 +83,12 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
             new Scenario("cherry_grove", Level.OVERWORLD, Biomes.CHERRY_GROVE, 12),
             new Scenario("birch_forest", Level.OVERWORLD, Biomes.BIRCH_FOREST, 13),
             new Scenario("cherry_open", Level.OVERWORLD, Biomes.CHERRY_GROVE, 14),
-            new Scenario("birch_open", Level.OVERWORLD, Biomes.BIRCH_FOREST, 15));
+            new Scenario("birch_open", Level.OVERWORLD, Biomes.BIRCH_FOREST, 15),
+            new Scenario("desert", Level.OVERWORLD, Biomes.DESERT, 16),
+            new Scenario("badlands", Level.OVERWORLD, Biomes.BADLANDS, 17),
+            new Scenario("gravel_hills", Level.OVERWORLD, Biomes.WINDSWEPT_GRAVELLY_HILLS, 18),
+            new Scenario("beach", Level.OVERWORLD, Biomes.BEACH, 19),
+            new Scenario("old_growth", Level.OVERWORLD, Biomes.OLD_GROWTH_PINE_TAIGA, 20));
 
     @Override
     public void runTest(ClientGameTestContext context) {
@@ -739,7 +744,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
         Path directory = Path.of("").toAbsolutePath().normalize();
         while (directory != null && !Files.exists(directory.resolve("build.gradle"))) directory = directory.getParent();
         require(directory != null, "Cannot locate target-version project directory");
-        return directory.getParent().resolve("docs/evidence/terrain-continuity");
+        return directory.getParent().resolve("docs/evidence/s2");
     }
 
     private static JsonObject readJson(Path path) {

@@ -3,7 +3,7 @@
 	"id": "buildup_groundscape",
 	"version": "${version}",
 	"name": "Buildup Groundscape",
-	"description": "Twenty vanilla-textured sod blocks with opt-in experimental natural patch generation.",
+	"description": "Thirty-eight vanilla-textured ground and sod blocks with opt-in experimental natural patch generation.",
 	"authors": [
 		"DavidBlackCN"
 	],

@@ -5,6 +5,12 @@
     "buildup_groundscape:mycelium_sod_slab",
     "buildup_groundscape:podzol_sod_slab",
     "buildup_groundscape:crimson_nylium_sod_slab",
-    "buildup_groundscape:warped_nylium_sod_slab"
+    "buildup_groundscape:warped_nylium_sod_slab",
+    "buildup_groundscape:sand_slab",
+    "buildup_groundscape:dirt_slab",
+    "buildup_groundscape:coarse_dirt_slab",
+    "buildup_groundscape:red_sand_slab",
+    "buildup_groundscape:gravel_slab",
+    "buildup_groundscape:rooted_dirt_slab"
   ]
 }

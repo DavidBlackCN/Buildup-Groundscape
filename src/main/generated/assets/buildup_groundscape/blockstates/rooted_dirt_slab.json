@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "buildup_groundscape:block/rooted_dirt_slab"
+    },
+    "type=double": {
+      "model": "buildup_groundscape:block/rooted_dirt_block"
+    },
+    "type=top": {
+      "model": "buildup_groundscape:block/rooted_dirt_slab_top"
+    }
+  }
+}

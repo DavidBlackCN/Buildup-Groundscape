@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:gravel_patch",
+    "buildup_groundscape:gravel_slab",
+    "buildup_groundscape:gravel_stairs"
+  ]
+}

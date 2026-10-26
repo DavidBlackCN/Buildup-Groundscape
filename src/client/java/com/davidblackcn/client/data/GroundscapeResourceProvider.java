@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Original, deterministic assets and data for the five sod families.
+ * Original, deterministic assets and data for sod and ground families.
  *
  * <p>Explicit JSON generation keeps the original cuboid meshes in one place, including tinted
  * faces that the vanilla stairs templates do not expose. The schemas are checked against the
@@ -135,7 +135,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 	}
 
 	private void blockStates(SurfaceFamily family) {
-		blockState(family, "block", object("", reference(family, "block")));
+		if (family.hasSodBlock()) blockState(family, "block", object("", reference(family, "block")));
 		JsonObject layers = new JsonObject();
 		for (int count = 1; count <= 8; count++) {
 			layers.add("layers=" + count + ",vegetation=none", reference(family, "patch_" + count));
@@ -183,6 +183,12 @@ public final class GroundscapeResourceProvider implements DataProvider {
 			case PODZOL -> "Podzol";
 			case CRIMSON_NYLIUM -> "Crimson Nylium";
 			case WARPED_NYLIUM -> "Warped Nylium";
+			case SAND -> "Sand";
+			case DIRT -> "Dirt";
+			case COARSE_DIRT -> "Coarse Dirt";
+			case RED_SAND -> "Red Sand";
+			case GRAVEL -> "Gravel";
+			case ROOTED_DIRT -> "Rooted Dirt";
 		};
 		String chineseFamily = switch (family) {
 			case GRASS -> "草地";
@@ -190,27 +196,34 @@ public final class GroundscapeResourceProvider implements DataProvider {
 			case PODZOL -> "灰化土";
 			case CRIMSON_NYLIUM -> "绯红菌岩";
 			case WARPED_NYLIUM -> "诡异菌岩";
+			case SAND -> "沙子";
+			case DIRT -> "泥土";
+			case COARSE_DIRT -> "砂土";
+			case RED_SAND -> "红沙";
+			case GRAVEL -> "沙砾";
+			case ROOTED_DIRT -> "缠根泥土";
 		};
 		String[] englishForms = {"Sod Block", "Sod Patch", "Sod Slab", "Sod Stairs"};
 		String[] chineseForms = {"草皮方块", "草皮薄层", "草皮台阶", "草皮楼梯"};
 		String tagKey = "tag.item." + NAMESPACE + "." + family.id() + "_sod";
-		english.addProperty(tagKey, englishFamily + " Sod");
-		chinese.addProperty(tagKey, chineseFamily + "草皮");
+		english.addProperty(tagKey, englishFamily + (family.hasSodBlock() ? " Sod" : " Ground"));
+		chinese.addProperty(tagKey, chineseFamily + (family.hasSodBlock() ? "草皮" : "地表变种"));
 		for (int index = 0; index < FORMS.length; index++) {
 			String form = FORMS[index];
+			if (!family.forms().contains(form)) continue;
 			JsonObject item = object("type", "minecraft:model", "model", modelId(family, form.equals("patch") ? "patch_1" : form));
 			if (family.usesGrassTint()) {
 				item.add("tints", array(object("type", "minecraft:grass", "temperature", 0.5, "downfall", 1.0)));
 			}
 			asset("items/" + path(family, form), object("model", item));
 			String key = "block." + NAMESPACE + "." + path(family, form);
-			english.addProperty(key, englishFamily + " " + englishForms[index]);
-			chinese.addProperty(key, chineseFamily + chineseForms[index]);
+			english.addProperty(key, englishFamily + " " + (family.hasSodBlock() ? englishForms[index] : englishForms[index].replace("Sod ", "")));
+			chinese.addProperty(key, chineseFamily + (family.hasSodBlock() ? chineseForms[index] : chineseForms[index].replace("草皮", "")));
 		}
 	}
 
 	private void loot(SurfaceFamily family) {
-		for (String form : FORMS) {
+		for (String form : family.forms()) {
 			JsonObject entry;
 			String id = id(family, form);
 			if (form.equals("patch")) {
@@ -241,12 +254,12 @@ public final class GroundscapeResourceProvider implements DataProvider {
 	}
 
 	private void recipes(SurfaceFamily family) {
-		String full = id(family, "block");
+		String full = family.hasSodBlock() ? id(family, "block") : "minecraft:" + family.id();
 		String patch = id(family, "patch");
 		String slab = id(family, "slab");
 		String stairs = id(family, "stairs");
 		String source = "minecraft:" + (family == SurfaceFamily.GRASS ? "grass_block" : family.id());
-		shapeless(path(family, "block"), source, 1, full, 1);
+		if (family.hasSodBlock()) shapeless(path(family, "block"), source, 1, full, 1);
 		shapeless(path(family, "patch"), full, 1, patch, 8);
 		shapeless(path(family, "block_from_patches"), patch, 8, full, 1);
 		shaped(path(family, "slab"), full, array("###"), slab, 6);
@@ -291,7 +304,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		JsonArray pickaxes = new JsonArray();
 		for (SurfaceFamily family : SurfaceFamily.values()) {
 			JsonArray familyBlocks = new JsonArray();
-			for (String form : FORMS) {
+			for (String form : family.forms()) {
 				String id = id(family, form);
 				all.add(id);
 				familyBlocks.add(id);
@@ -338,7 +351,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 	}
 
 	private static String path(SurfaceFamily family, String form) {
-		return family.id() + "_sod_" + form;
+		return family.path(form);
 	}
 
 	private static String id(SurfaceFamily family, String form) {
@@ -352,6 +365,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 			case PODZOL -> "podzol_top";
 			case CRIMSON_NYLIUM -> "crimson_nylium";
 			case WARPED_NYLIUM -> "warped_nylium";
+			default -> family.id();
 		};
 	}
 

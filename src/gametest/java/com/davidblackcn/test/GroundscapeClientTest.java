@@ -24,6 +24,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import net.fabricmc.fabric.api.client.gametest.v1.screenshot.TestScreenshotOptions;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
@@ -32,17 +34,22 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
     @Override
     public void runTest(ClientGameTestContext context) {
         if (System.getProperty("groundscape.worldgenTest") != null) return;
+        context.runOnClient(client -> {
+            client.getWindow().setWidth(1280);
+            client.getWindow().setHeight(720);
+            client.gameRenderer.resize(1280, 720);
+        });
         TestWorldSave save;
         Map<BlockPos, BlockState> showcase = new LinkedHashMap<>();
         try (var world = context.worldBuilder().create()) {
             save = world.getWorldSave();
             var server = world.getServer();
             var connection = world.getConnection();
-            server.runCommand("fill -4 4 -4 52 4 40 minecraft:stone");
+            server.runCommand("fill -4 4 -4 52 4 92 minecraft:stone");
             server.runCommand("time set noon");
             server.runCommand("weather clear");
             server.runCommand("gamemode spectator @a");
-            server.runCommand("tp @a 24 25 42 180 38");
+            server.runCommand("tp @a 24 40 96 180 32");
             server.runOnServer(s -> {
                 int row = 0;
                 for (var variant : GroundscapeBlocks.variants()) {
@@ -61,19 +68,19 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                     row++;
                 }
             });
-            require(showcase.size() == 340, "Showcase includes every dry block state without overlaps");
+            require(showcase.size() == 742, "Showcase includes every dry block state without overlaps");
             context.waitTick();
             connection.waitForClientboundPackets();
             connection.waitForChunksRender();
             checkModels(context);
             checkStates(context, showcase);
             for (String biome : new String[]{"minecraft:plains", "minecraft:swamp", "minecraft:badlands"}) {
-                server.runCommand("fillbiome -4 0 -4 52 16 40 " + biome);
+                server.runCommand("fillbiome -4 0 -4 52 16 92 " + biome);
                 context.waitTicks(5);
                 connection.waitForClientboundPackets();
                 checkGrassTint(context, new BlockPos(0, 5, 0));
             }
-            context.takeScreenshot("groundscape-showcase");
+            screenshot(context, "groundscape-showcase");
             server.runCommand("fill 59 4 0 75 4 8 minecraft:grass_block");
             server.runCommand("fillbiome 59 0 0 75 16 8 minecraft:plains");
             server.runOnServer(s -> {
@@ -86,8 +93,27 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             });
             server.runCommand("tp @a 66 9 15 180 27");
             context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender();
-            context.takeScreenshot("groundscape-vegetation");
-            server.runCommand("tp @a 24 25 42 180 38");
+            screenshot(context, "groundscape-vegetation");
+            server.runCommand("fill 60 4 18 82 4 48 minecraft:stone");
+            server.runOnServer(s -> {
+                int row = 0;
+                for (var variant : GroundscapeBlocks.variants()) {
+                    if (variant.family().hasSodBlock()) continue;
+                    int z = 20 + row++ * 5;
+                    s.overworld().setBlock(new BlockPos(62, 5, z), variant.family().vanillaBlock().defaultBlockState(), 2);
+                    for (int i = 0; i < 6; i++) {
+                        var state = i < 4 ? variant.patch().defaultBlockState().setValue(SodPatchBlock.LAYERS, 1 + i * 2)
+                                : i == 4 ? variant.slab().defaultBlockState() : variant.stairs().defaultBlockState();
+                        var pos = new BlockPos(65 + i * 3, 5, z);
+                        s.overworld().setBlock(pos, state, 2); showcase.put(pos, state);
+                    }
+                }
+            });
+            server.runCommand("tp @a 71 23 60 180 38");
+            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender();
+            context.waitTicks(220); // Let transient login/game-mode messages fade before the visual evidence.
+            screenshot(context, "groundscape-s2-materials");
+            server.runCommand("tp @a 24 40 96 180 32");
             checkTexturePack(context, connection);
         }
         // Actual world close/reopen, not merely a codec round trip.
@@ -135,6 +161,16 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                         "Dedicated reconnect retains stack"));
             }
         }
+    }
+
+    private static void screenshot(ClientGameTestContext context, String name) {
+        Path directory = Path.of("").toAbsolutePath().normalize();
+        while (directory != null && !Files.exists(directory.resolve("build.gradle"))) directory = directory.getParent();
+        require(directory != null, "Cannot locate project directory");
+        Path evidence = directory.getParent().resolve("docs/evidence/s2");
+        try { Files.createDirectories(evidence); } catch (IOException e) { throw new UncheckedIOException(e); }
+        context.takeScreenshot(TestScreenshotOptions.of(name).withSize(1280, 720)
+                .withDestinationDir(evidence).disableCounterPrefix());
     }
 
     private static void checkModels(ClientGameTestContext context) {
@@ -192,7 +228,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             }
         });
         context.waitTicks(10);
-        context.takeScreenshot("groundscape-resourcepack");
+        screenshot(context, "groundscape-resourcepack");
         var restore = context.computeOnClient(client -> {
             client.getResourcePackRepository().setSelected(oldSelection);
             return client.reloadResourcePacks();
@@ -209,6 +245,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             case PODZOL -> "podzol_top";
             case CRIMSON_NYLIUM -> "crimson_nylium";
             case WARPED_NYLIUM -> "warped_nylium";
+            default -> family.id();
         };
     }
 

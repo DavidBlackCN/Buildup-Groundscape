@@ -101,7 +101,7 @@ public final class SurfaceAnalyzer {
 		if (profile == null) {
 			return reject(Rejection.UNKNOWN_SURFACE);
 		}
-		if (SodPatchBlock.canContain(destination) && (ground.is(Blocks.CRIMSON_NYLIUM) || ground.is(Blocks.WARPED_NYLIUM))) {
+		if (SodPatchBlock.canContain(destination) && !profile.family().supportsVegetation()) {
 			return reject(Rejection.OCCUPIED);
 		}
 		if (!isFullNaturalSupport(level, groundPos, ground)) {

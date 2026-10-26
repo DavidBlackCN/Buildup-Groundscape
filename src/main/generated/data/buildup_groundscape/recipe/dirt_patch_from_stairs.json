@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:dirt_stairs"
+  ],
+  "result": {
+    "count": 6,
+    "id": "buildup_groundscape:dirt_patch"
+  }
+}

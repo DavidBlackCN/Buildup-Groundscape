@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "buildup_groundscape:coarse_dirt_slab",
+    "buildup_groundscape:coarse_dirt_slab"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:coarse_dirt"
+  }
+}

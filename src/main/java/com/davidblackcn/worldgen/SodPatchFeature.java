@@ -159,7 +159,7 @@ public record SodPatchFeature() implements Feature {
 	private static boolean tryPlace(ServerLevel level, LevelChunk chunk, FinalizedChunkView view, BlockPos target,
 			GroundscapeWorldgenConfig config, ReadBudget budget) {
 		SurfaceAnalyzer.Analysis analysis = SurfaceAnalyzer.analyze(view, target, budget);
-		if (!analysis.accepted()) {
+		if (!analysis.accepted() || !config.material(analysis.profile().family()).enabled()) {
 			return false;
 		}
 		SlopeTerrain terrain = SlopeTerrain.sample(view, target, budget);

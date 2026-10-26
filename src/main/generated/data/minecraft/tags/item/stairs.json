@@ -5,6 +5,12 @@
     "buildup_groundscape:mycelium_sod_stairs",
     "buildup_groundscape:podzol_sod_stairs",
     "buildup_groundscape:crimson_nylium_sod_stairs",
-    "buildup_groundscape:warped_nylium_sod_stairs"
+    "buildup_groundscape:warped_nylium_sod_stairs",
+    "buildup_groundscape:sand_stairs",
+    "buildup_groundscape:dirt_stairs",
+    "buildup_groundscape:coarse_dirt_stairs",
+    "buildup_groundscape:red_sand_stairs",
+    "buildup_groundscape:gravel_stairs",
+    "buildup_groundscape:rooted_dirt_stairs"
   ]
 }

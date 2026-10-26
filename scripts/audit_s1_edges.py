@@ -31,12 +31,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--minecraft-common-jar", required=True, type=Path)
     parser.add_argument("--evidence-dir", type=Path,
-                        default=Path(__file__).resolve().parents[2] / "docs/evidence/terrain-continuity",
-                        help="Snapshot directory; defaults to ../docs/evidence/terrain-continuity outside the repository")
+                        default=Path(__file__).resolve().parents[2] / "docs/evidence/s2",
+                        help="Snapshot directory; defaults to ../docs/evidence/s2 outside the repository")
     args = parser.parse_args()
     evidence = args.evidence_dir
     terrain = {"minecraft:grass_block", "minecraft:podzol", "minecraft:mycelium",
-               "minecraft:crimson_nylium", "minecraft:warped_nylium"}
+               "minecraft:crimson_nylium", "minecraft:warped_nylium", "minecraft:sand", "minecraft:red_sand",
+               "minecraft:gravel", "minecraft:sandstone", "minecraft:red_sandstone", "minecraft:terracotta"}
     with zipfile.ZipFile(args.minecraft_common_jar) as jar:
         def tag(name):
             namespace, key = name.split(":")
@@ -47,7 +48,7 @@ def main():
                     tag(entry[1:])
                 else:
                     terrain.add(entry)
-        for name in ["dirt", "base_stone_overworld", "base_stone_nether"]:
+        for name in ["dirt", "base_stone_overworld", "base_stone_nether", "badlands_terracotta"]:
             tag("minecraft:" + name)
     reports = {}
     for mode, control in [("on", "off"), ("repeat", "off_reverse")]:
@@ -71,7 +72,7 @@ def main():
 
             for i, entry in enumerate(result[6]):
                 name = result[5][entry]
-                if not name.startswith("buildup_groundscape:") or "_sod_patch[" not in name:
+                if not name.startswith("buildup_groundscape:") or "_patch[" not in name:
                     continue
                 x, z, base = ox + i // (width * height), oz + i // height % width, oy + i % height - 1
                 if not (ox + 2 <= x < ox + width - 2 and oz + 2 <= z < oz + width - 2):

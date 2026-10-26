@@ -7,7 +7,7 @@ public final class SlopePlanner {
 
 	public static int layers(long seed, int x, int z, SurfaceProfile profile, SlopeTerrain terrain,
 			GroundscapeWorldgenConfig config) {
-		if (config.density() == 0) return 0;
+		if (config.density() == 0 || !config.material(profile.family()).enabled()) return 0;
 		// Raising the exposed lip makes the original step taller, never smoother.
 		if (terrain.downhillEdge()) return 0;
 		double slope = terrain.strength();
@@ -32,7 +32,7 @@ public final class SlopePlanner {
 			double relief = Math.clamp((3 - distanceToStep) / 2, 0, 1);
 			double variation = 0.7 + (detail - 0.5) * (0.3 + config.heightVariation() * 0.8);
 			double densityScale = Math.clamp(config.density() / 0.12, 0.2, 1.3);
-			double strength = relief * variation * config.layerScale()
+			double strength = relief * variation * config.layerScale() * config.material(profile.family()).thicknessScale()
 					* (0.65 + config.slopeInfluence() * 0.35 / 0.55) * densityScale;
 			// Scale the whole profile into the requested range; never clamp 4..7 into a 3-layer plateau.
 			double normalized = Math.pow(Math.clamp(strength, 0, 1), 1.5);
@@ -44,6 +44,6 @@ public final class SlopePlanner {
 		double interior = Math.clamp((SurfaceNoise.densityScore(seed, x, z) - threshold) / 0.16, 0, 1);
 		if (interior <= 0) return 0;
 		double detail = SurfaceNoise.heightDetail(seed, x, z);
-		return Math.min(config.maxLayers(), 1 + (int) Math.floor(detail * interior + 0.5));
+		return Math.min(config.maxLayers(), 1 + (int) Math.floor(detail * interior * config.material(profile.family()).thicknessScale() + 0.5));
 	}
 }

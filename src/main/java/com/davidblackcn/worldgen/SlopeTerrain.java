@@ -95,6 +95,9 @@ public record SlopeTerrain(double gradientX, double gradientZ, double meanOffset
 	private static boolean isTerrain(BlockState state) {
 		// Never let a datapack tag turn our earlier decoration into terrain input.
 		return !SurfaceAnalyzer.isAirBeforeDecoration(state) && !SurfaceAnalyzer.isProtected(state) && (state.is(BlockTags.DIRT)
+				|| state.is(Blocks.SAND) || state.is(Blocks.RED_SAND) || state.is(Blocks.GRAVEL)
+				|| state.is(Blocks.SANDSTONE) || state.is(Blocks.RED_SANDSTONE)
+				|| state.is(BlockTags.BADLANDS_TERRACOTTA)
 				|| state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.PODZOL) || state.is(Blocks.MYCELIUM)
 				|| state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.BASE_STONE_NETHER)
 				|| state.is(Blocks.CRIMSON_NYLIUM) || state.is(Blocks.WARPED_NYLIUM));

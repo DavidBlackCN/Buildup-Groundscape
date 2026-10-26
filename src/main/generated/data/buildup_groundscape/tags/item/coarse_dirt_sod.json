@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:coarse_dirt_patch",
+    "buildup_groundscape:coarse_dirt_slab",
+    "buildup_groundscape:coarse_dirt_stairs"
+  ]
+}
