@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "package": "com.davidblackcn.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": ["ServerPlayerGameModeMixin"],
+  "client": ["client.MultiPlayerGameModeMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

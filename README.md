@@ -20,7 +20,7 @@ Minecraft **26.3 / Fabric / Java 25** 的地表建筑装饰 Mod。提供十一�
 
 1. 使用 Minecraft **26.3**、Java **25** 和 Fabric Loader **0.20.1 或兼容的后续版本**。
 2. 安装适用于 26.3 的 **Fabric API 0.165.0+26.3 或兼容的后续版本**。
-3. 将 `build/libs/buildup-groundscape-1.4.0.jar` 放入客户端及专服的 `mods` 目录。不要安装 `-sources.jar`。
+3. 将 `build/libs/buildup-groundscape-1.4.1.jar` 放入客户端及专服的 `mods` 目录。不要安装 `-sources.jar`。
 
 客户端和服务器都需要安装。本项目不包含 Forge/NeoForge 版本，也不声明支持其他 Minecraft 版本。发行前建议先在测试世界验收。
 
@@ -34,7 +34,7 @@ Minecraft **26.3 / Fabric / Java 25** 的地表建筑装饰 Mod。提供十一�
 - 九种主世界材质用锹挖掘；两种菌岩用镐。硬度、音效、抗爆、工具要求及地图基础颜色取自对应原版方块。
 - 沙子、红沙和沙砾的新增变种不受重力影响；薄层仍在失去支撑后掉落物品。原版完整沙子、红沙和沙砾保持原行为。
 - 所有形态是稳定装饰方块，不扩散、不退化为泥土/下界岩，不执行草地生长或骨粉繁殖。
-- 自然生成可保留所在格的原版矮草、蕨类，植物从薄层实际顶面长出。空手右键仅清除植物，剪刀右键采集植物并消耗耐久；挖掉整体会回收薄层并按原版植物掉落规则结算植物。植物不增加实体碰撞。上方被方块占据时植物脱落，薄层保留。高草、花、作物和第三方植物暂不支持共存，仍会避让。
+- 自然生成可保留所在格的原版矮草、蕨类，植物从薄层实际顶面长出。创造和生存模式均先用左键打掉植物，再挖掘薄层；第一次保留原有材质和层数，植物采用原版挖掘速度、掉落及工具耐久规则。生存模式可用剪刀左键采集植物，创造模式不掉落。右键不再提供除草交互。植物不增加实体碰撞。上方被方块占据时植物脱落，薄层保留。高草、花、作物和第三方植物暂不支持共存，仍会避让。
 - 1–7 层薄层允许下方原版草方块、菌丝和菌岩维持生长条件；8 层仍按完整遮光处理，下方原版地表可能退化。
 - 薄层阻止普通地面自然生成的生物在其表面或所在格生成；不拦截命令、刷怪蛋或其他 Mod 强制生成。
 
@@ -74,7 +74,7 @@ Minecraft **26.3 / Fabric / Java 25** 的地表建筑装饰 Mod。提供十一�
 
 ## 构建与验证
 
-工具链固定为 Minecraft 26.3、Java 25、Gradle 9.8.2、Loom 1.19.3、Loader 0.20.1、Fabric API 0.165.0+26.3。使用官方去混淆名称，无 Yarn/Remap 插件或自定义 Mixin。
+工具链固定为 Minecraft 26.3、Java 25、Gradle 9.8.2、Loom 1.19.3、Loader 0.20.1、Fabric API 0.165.0+26.3。使用官方去混淆名称，无 Yarn/Remap 插件或 Access Widener。两个客户端/服务端游戏模式 Mixin 负责植物优先拆除及客户端预测，在原版权限检查和 Fabric 拆除取消事件之后执行，裸薄层走原版拆除路径。
 
 ```powershell
 # JAVA_HOME 应指向本机 JDK 25；示例路径请按安装位置调整。
@@ -89,7 +89,7 @@ python scripts/verify_resources.py
 
 `src/main/generated` 的 JSON 由 Fabric Datagen 生成并纳入产物，请修改生成器而非手改输出。Python 3 仅用于资源审计，不是玩家依赖。测试 Mod 位于 `src/gametest`，不会打包进发行 Jar。客户端测试自动创建展示世界及原创棋盘资源包，结果留在 `build/run/clientGameTest/`。
 
-工作报告、归档日志和截图保存在项目仓库外的 `../docs/`，不纳入 Git。坡面 GameTest 的统计、客户端截图与自然生成对照写入 `../docs/evidence/s2/`；Gradle 和 Minecraft 自身的临时输出仍位于已忽略的 `build/`、`run/`。自然生成对照按 `off`、`on`、`off_reverse`、`repeat` 顺序执行 `./gradlew runClientGameTest -PworldgenTest=<模式>`，之后可运行 `scripts/audit_s1_edges.py --minecraft-common-jar <Minecraft公共Jar路径>` 审计快照；`--evidence-dir` 可指定其他证据目录。克隆仓库不需要已有工作报告即可构建。Datagen 与 build 请按上述命令分两次调用，避免同次任务图提前复制旧资源。
+工作报告、归档日志和截图保存在项目仓库外的 `../docs/`，不纳入 Git。当前坡面 GameTest 的统计和常规客户端截图写入 `../docs/evidence/plant-breaking/`，自然生成对照仍写入 `../docs/evidence/s2/`；Gradle 和 Minecraft 自身的临时输出仍位于已忽略的 `build/`、`run/`。自然生成对照按 `off`、`on`、`off_reverse`、`repeat` 顺序执行 `./gradlew runClientGameTest -PworldgenTest=<模式>`，之后可运行 `scripts/audit_s1_edges.py --minecraft-common-jar <Minecraft公共Jar路径>` 审计快照；`--evidence-dir` 可指定其他证据目录。克隆仓库不需要已有工作报告即可构建。Datagen 与 build 请按上述命令分两次调用，避免同次任务图提前复制旧资源。
 
 ## 验收与许可
 

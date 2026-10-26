@@ -159,6 +159,53 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                 reconnected.waitForChunksDownload();
                 context.runOnClient(client -> require(client.level.getBlockState(pos).getValue(SodPatchBlock.LAYERS) == 8,
                         "Dedicated reconnect retains stack"));
+                // Real client prediction + START/STOP packets to a separate dedicated server.
+                for (String mode : new String[]{"survival", "creative"}) {
+                    server.runCommand("gamemode " + mode + " @a");
+                    for (var plant : new SodPatchBlock.Vegetation[]{SodPatchBlock.Vegetation.GRASS, SodPatchBlock.Vegetation.FERN}) {
+                        for (boolean shears : new boolean[]{false, true}) {
+                            var composite = patch.defaultBlockState().setValue(SodPatchBlock.LAYERS, 5)
+                                    .setValue(SodPatchBlock.VEGETATION, plant);
+                            var bare = composite.setValue(SodPatchBlock.VEGETATION, SodPatchBlock.Vegetation.NONE);
+                            server.runOnServer(s -> {
+                                s.overworld().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                                        new net.minecraft.world.phys.AABB(pos).inflate(4)).forEach(net.minecraft.world.entity.item.ItemEntity::discard);
+                                s.overworld().setBlock(pos, composite, 3);
+                                reconnected.getServerPlayer().getInventory().setSelectedItem(shears
+                                        ? new ItemStack(net.minecraft.world.item.Items.SHEARS) : ItemStack.EMPTY);
+                            });
+                            context.waitTicks(6); reconnected.waitForClientboundPackets();
+                            context.runOnClient(client -> {
+                                require(client.level.getBlockState(pos).equals(composite), "composite synchronized before right click: " + client.level.getBlockState(pos));
+                                require(shears ? client.player.getMainHandItem().is(net.minecraft.world.item.Items.SHEARS) : client.player.getMainHandItem().isEmpty(),
+                                        "expected right-click tool: " + client.player.getMainHandItem());
+                                client.gameMode.useItemOn(client.player, InteractionHand.MAIN_HAND,
+                                        new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false));
+                            });
+                            reconnected.waitForServerboundPackets(); context.waitTick(); reconnected.waitForClientboundPackets();
+                            server.runOnServer(s -> require(s.overworld().getBlockState(pos).equals(composite), "right click no longer weeds: " + mode + "/" + plant + "/shears=" + shears + " got " + s.overworld().getBlockState(pos)));
+                            context.runOnClient(client -> {
+                                require(client.gameMode.startDestroyBlock(pos, Direction.UP), "first native left click succeeds");
+                                require(client.level.getBlockState(pos).equals(bare), "client predicts plant-only removal immediately");
+                                client.gameMode.stopDestroyBlock();
+                            });
+                            reconnected.waitForServerboundPackets(); context.waitTicks(6); reconnected.waitForClientboundPackets();
+                            server.runOnServer(s -> require(s.overworld().getBlockState(pos).equals(bare), "server retains five layers after first break"));
+                            context.runOnClient(client -> require(client.level.getBlockState(pos).equals(bare), "plant removal survives server acknowledgement"));
+                            context.runOnClient(client -> client.gameMode.startDestroyBlock(pos, Direction.UP));
+                            for (int tick = 0; tick < 80 && context.computeOnClient(client -> !client.level.getBlockState(pos).isAir()); tick++) {
+                                context.runOnClient(client -> client.gameMode.continueDestroyBlock(pos, Direction.UP));
+                                context.waitTick();
+                            }
+                            reconnected.waitForServerboundPackets(); context.waitTicks(2); reconnected.waitForClientboundPackets();
+                            server.runOnServer(s -> require(s.overworld().getBlockState(pos).isAir(), "second native left click removes thin layer"));
+                            context.runOnClient(client -> {
+                                require(client.level.getBlockState(pos).isAir(), "no ghost thin layer after second break");
+                                client.gameMode.stopDestroyBlock();
+                            });
+                        }
+                    }
+                }
             }
         }
     }
@@ -167,7 +214,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
         Path directory = Path.of("").toAbsolutePath().normalize();
         while (directory != null && !Files.exists(directory.resolve("build.gradle"))) directory = directory.getParent();
         require(directory != null, "Cannot locate project directory");
-        Path evidence = directory.getParent().resolve("docs/evidence/s2");
+        Path evidence = directory.getParent().resolve("docs/evidence/plant-breaking");
         try { Files.createDirectories(evidence); } catch (IOException e) { throw new UncheckedIOException(e); }
         context.takeScreenshot(TestScreenshotOptions.of(name).withSize(1280, 720)
                 .withDestinationDir(evidence).disableCounterPrefix());

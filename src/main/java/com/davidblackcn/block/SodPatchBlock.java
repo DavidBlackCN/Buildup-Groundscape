@@ -20,14 +20,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.ArrayList;
@@ -138,33 +135,35 @@ public final class SodPatchBlock extends Block {
 	}
 
 	@Override
-	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-			Player player, InteractionHand hand, BlockHitResult hit) {
-		if (stack.is(Items.SHEARS) && state.getValue(VEGETATION) != Vegetation.NONE) {
-			if (level instanceof ServerLevel server) {
-				clipPlant(server, pos, state, player, stack);
-				stack.hurtAndBreak(1, player, hand);
-			}
-			return InteractionResult.SUCCESS;
-		}
-		return super.useItemOn(stack, state, level, pos, player, hand, hit);
+	protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+		return state.getValue(VEGETATION) == Vegetation.NONE ? super.getDestroyProgress(state, player, level, pos)
+				: state.getValue(VEGETATION).plant().getDestroyProgress(player, level, pos);
 	}
 
 	@Override
-	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-		if (state.getValue(VEGETATION) == Vegetation.NONE || !player.getMainHandItem().isEmpty()) return InteractionResult.PASS;
-		if (level instanceof ServerLevel server) clipPlant(server, pos, state, player, ItemStack.EMPTY);
-		return InteractionResult.SUCCESS;
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+		if (state.getValue(VEGETATION) == Vegetation.NONE) return super.playerWillDestroy(level, pos, state, player);
+		BlockState plant = state.getValue(VEGETATION).plant();
+		// Native particles, sound and game event describe the plant being removed.
+		return plant.getBlock().playerWillDestroy(level, pos, plant, player);
 	}
 
-	private static void clipPlant(ServerLevel level, BlockPos pos, BlockState state, Player player, ItemStack tool) {
-		if (!level.getBlockState(pos).equals(state)) return;
-		level.setBlock(pos, state.setValue(VEGETATION, Vegetation.NONE), Block.UPDATE_ALL);
-		if (!player.isCreative()) {
-			for (ItemStack drop : Block.getDrops(state.getValue(VEGETATION).plant(), level, pos, null, player, tool)) {
-				Block.popResource(level, pos, drop);
-			}
+	/** Called only after vanilla permissions and Fabric BEFORE listeners have accepted the break. */
+	public static boolean removeVegetationForPlayer(Level level, BlockPos pos, Player player) {
+		BlockState state = level.getBlockState(pos);
+		if (!(state.getBlock() instanceof SodPatchBlock) || state.getValue(VEGETATION) == Vegetation.NONE) return false;
+		BlockState plant = state.getValue(VEGETATION).plant();
+		// Keep the original block and height, including during client prediction. Do not briefly
+		// replace it with air: that would invalidate neighboring blocks and lose the second target.
+		if (!level.setBlock(pos, state.setValue(VEGETATION, Vegetation.NONE), Block.UPDATE_ALL | Block.UPDATE_IMMEDIATE)) return true;
+		if (level instanceof ServerLevel server && player instanceof ServerPlayer serverPlayer && !serverPlayer.preventsBlockDrops()) {
+			ItemStack tool = player.getMainHandItem();
+			ItemStack lootTool = tool.copy();
+			boolean correctTool = player.hasCorrectToolForDrops(plant);
+			tool.mineBlock(level, plant, pos, player);
+			if (correctTool) plant.getBlock().playerDestroy(server, serverPlayer, pos, plant, null, lootTool);
 		}
+		return true;
 	}
 
 	@Override

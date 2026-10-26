@@ -113,7 +113,7 @@ public final class GroundscapeContinuityTests {
     }
 
     @GameTest
-    public void clippingVegetationPreservesLayersAndCannotRepeatDrops(GameTestHelper h) {
+    public void rightClickNoLongerClipsVegetation(GameTestHelper h) {
         var player = h.makeMockPlayer(GameType.SURVIVAL);
         GameType.SURVIVAL.updatePlayerAbilities(player.getAbilities());
         var pos = h.absolutePos(CELL); var level = h.getLevel();
@@ -123,16 +123,12 @@ public final class GroundscapeContinuityTests {
                 .setValue(SodPatchBlock.LAYERS, 5).setValue(SodPatchBlock.VEGETATION, SodPatchBlock.Vegetation.FERN);
         h.setBlock(CELL, state);
         var hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false);
-        h.assertTrue(state.useItemOn(tool, level, player, InteractionHand.MAIN_HAND, hit).consumesAction(), "shears clip plant");
-        h.assertBlockProperty(CELL, SodPatchBlock.LAYERS, 5);
-        h.assertBlockProperty(CELL, SodPatchBlock.VEGETATION, SodPatchBlock.Vegetation.NONE);
-        h.assertValueEqual(tool.getDamageValue(), 1, "one durability consumed");
-        h.getBlockState(CELL).useItemOn(tool, level, player, InteractionHand.MAIN_HAND, hit);
-        h.assertValueEqual(tool.getDamageValue(), 1, "empty patch cannot be clipped twice");
-        h.setBlock(CELL, state); player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-        h.assertTrue(state.useWithoutItem(level, player, hit).consumesAction(), "empty hand removes vegetation only");
-        h.assertBlockProperty(CELL, SodPatchBlock.LAYERS, 5);
-        h.assertBlockProperty(CELL, SodPatchBlock.VEGETATION, SodPatchBlock.Vegetation.NONE);
+        h.assertFalse(state.useItemOn(tool, level, player, InteractionHand.MAIN_HAND, hit).consumesAction(), "shears right click passes through");
+        h.assertValueEqual(h.getBlockState(CELL), state, "right click preserves composite");
+        h.assertValueEqual(tool.getDamageValue(), 0, "right click consumes no durability");
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        h.assertFalse(state.useWithoutItem(level, player, hit).consumesAction(), "empty hand right click passes through");
+        h.assertValueEqual(h.getBlockState(CELL), state, "empty hand leaves plant intact");
         h.succeed();
     }
 }
