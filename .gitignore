@@ -39,3 +39,11 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+
+# Local work reports and evidence belong in ../docs/, outside this repository.
+/docs/
+/logs/
+/screenshots/
+*.log
+__pycache__/
+*.pyc

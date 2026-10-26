@@ -61,7 +61,9 @@ public final class SodPatchBlock extends Block {
 
 	@Override
 	protected boolean useShapeForLightOcclusion(BlockState state) {
-		return true;
+		// Partial sod keeps its native grass/mycelium/nylium support alive. A full
+		// bottom face must not make a thin patch an opaque ceiling for random ticks.
+		return state.getValue(LAYERS) == MAX_LAYERS;
 	}
 
 	@Override

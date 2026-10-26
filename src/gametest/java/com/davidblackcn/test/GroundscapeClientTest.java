@@ -31,6 +31,7 @@ import javax.imageio.ImageIO;
 public final class GroundscapeClientTest implements FabricClientGameTest {
     @Override
     public void runTest(ClientGameTestContext context) {
+        if (System.getProperty("groundscape.worldgenTest") != null) return;
         TestWorldSave save;
         Map<BlockPos, BlockState> showcase = new LinkedHashMap<>();
         try (var world = context.worldBuilder().create()) {

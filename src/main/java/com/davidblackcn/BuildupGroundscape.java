@@ -1,6 +1,7 @@
 package com.davidblackcn;
 
 import com.davidblackcn.registry.GroundscapeBlocks;
+import com.davidblackcn.worldgen.GroundscapeWorldgen;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ public class BuildupGroundscape implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		GroundscapeBlocks.initialize();
+		GroundscapeWorldgen.initialize();
 		LOGGER.info("Registered {} Buildup Groundscape sod blocks", GroundscapeBlocks.allBlocks().size());
 	}
 

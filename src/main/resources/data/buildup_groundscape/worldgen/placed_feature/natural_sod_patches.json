@@ -1,0 +1,8 @@
+{
+  "feature": "buildup_groundscape:natural_sod_patches",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -46,6 +46,27 @@ if (providers.gradleProperty('compatMods').isPresent()) {
 	}
 }
 
+// Reproducible, isolated natural-generation comparisons. Production defaults stay disabled.
+if (providers.gradleProperty('worldgenTest').isPresent()) {
+	def worldgenMode = providers.gradleProperty('worldgenTest').get()
+	if (!(worldgenMode in ['off', 'on', 'off_reverse', 'repeat'])) {
+		throw new GradleException('worldgenTest must be off, on, off_reverse, or repeat')
+	}
+	loom.runs.clientGameTest {
+		vmArg "-Dgroundscape.worldgenTest=$worldgenMode"
+		// Isolate mod differences from vanilla's concurrent feature overlap.
+		vmArg '-Dmax.bg.threads=1'
+	}
+	def testConfig = layout.buildDirectory.file('run/clientGameTest/config/buildup_groundscape-worldgen.json').get().asFile
+	def configText = "{\"enabled\":${worldgenMode in ['on', 'repeat']},\"density\":0.12,\"maxLayers\":7}\n"
+	tasks.named('runClientGameTest') {
+		doFirst {
+			testConfig.parentFile.mkdirs()
+			testConfig.setText(configText, 'UTF-8')
+		}
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -80,6 +101,8 @@ java {
 
 tasks.named('sourcesJar') {
 	exclude '.cache/**'
+	// When both are requested, package the completed generated resources.
+	mustRunAfter tasks.named('runDatagen')
 }
 
 // Exercise gameplay in a real dedicated game environment on every verification build.
