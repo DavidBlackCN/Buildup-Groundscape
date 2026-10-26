@@ -113,16 +113,16 @@ public final class GroundscapeSlopeTests {
         com.davidblackcn.BuildupGroundscape.LOGGER.info("Slope fixture layers: flat={}, slope={}, maxJump={}",
                 Arrays.toString(flat), Arrays.toString(slope), maxJump);
         h.assertTrue(flatCount > 0 && slopeCount > flatCount * 3, "slopes preferentially covered, flats retain sparse patches");
-        h.assertTrue(slopeCount < 513 * 513 * .5, "default leaves at least half of a uniform slope uncovered");
+        h.assertValueEqual(slopeCount, 513 * 513, "every safe uphill ramp participates without noise holes");
         h.assertTrue((slope[3] + slope[4] + slope[5] + slope[6]) > slopeCount * .6, "3-6 layers common on slopes");
         h.assertTrue(flat[3] + flat[4] + flat[5] + flat[6] + flat[7] == 0, "flat ground has no tall random spikes");
-        for (int i = 1; i <= 7; i++) h.assertTrue(high[i] > 0, "configured distribution actually exercises layer " + i);
+        h.assertTrue(high[7] > 0 && slope[7] > 0, "seven layers reachable with default and thicker profiles");
         h.assertTrue(maxJump <= 2, "default continuous field has no abrupt height jump on a uniform slope: " + maxJump);
         h.assertValueEqual(isolated, 0, "no isolated tall proposals in continuous field");
         Path root = Path.of("").toAbsolutePath();
         while (root != null && !Files.exists(root.resolve("build.gradle"))) root = root.getParent();
         if (root == null) throw new IOException("Project root not found");
-        Path file = root.getParent().resolve("docs/evidence/s1-fix/planner-metrics.json"); Files.createDirectories(file.getParent());
+        Path file = root.getParent().resolve("docs/evidence/terrain-continuity/planner-metrics.json"); Files.createDirectories(file.getParent());
         Files.writeString(file, new GsonBuilder().setPrettyPrinting().create().toJson(Map.of(
                 "seed", SEED, "samples", 513 * 513, "flat_layers", flat, "slope_layers", slope,
                 "layer_scale_1_4", high, "maximum_adjacent_layer_delta", maxJump, "isolated_tall_proposals", isolated)) + "\n");
@@ -171,7 +171,7 @@ public final class GroundscapeSlopeTests {
             double coverage = count / (48.0 * 48);
             min = Math.min(min, coverage); max = Math.max(max, coverage);
         }
-        h.assertTrue(min > .10 && max < .75, "regional coverage stays mixed: " + min + " .. " + max);
+        h.assertTrue(min == 1 && max == 1, "safe ramps have no regional coverage veto: " + min + " .. " + max);
         com.davidblackcn.BuildupGroundscape.LOGGER.info("48x48 uniform-slope regional coverage: {} .. {}", min, max);
         h.succeed();
     }

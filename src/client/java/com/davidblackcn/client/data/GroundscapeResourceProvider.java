@@ -66,6 +66,22 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		model(family, "block", mesh(family, List.of(new Box(0, 0, 0, 16, 16, 16))));
 		for (int layers = 1; layers <= 8; layers++) {
 			model(family, "patch_" + layers, mesh(family, List.of(new Box(0, 0, 0, 16, layers * 2, 16))));
+			for (String plant : List.of("grass", "fern")) {
+				JsonObject combined = mesh(family, List.of(new Box(0, 0, 0, 16, layers * 2, 16)));
+				combined.getAsJsonObject("textures").addProperty("plant", "minecraft:block/" + (plant.equals("grass") ? "short_grass" : plant));
+				int y = layers * 2;
+				// Original crossed planes, lifted to the actual patch top; native textures only.
+				for (boolean alongX : List.of(true, false)) {
+					JsonObject face = object("texture", "#plant", "uv", array(0, 0, 16, 16), "tintindex", 1);
+					combined.getAsJsonArray("elements").add(object(
+							"from", alongX ? array(1, y, 8) : array(8, y, 1),
+							"to", alongX ? array(15, y + 16, 8) : array(8, y + 16, 15),
+							"rotation", object("origin", array(8, y + 8, 8), "axis", "y", "angle", 45, "rescale", true),
+							"shade_direction_override", "up",
+							"faces", alongX ? object("north", face, "south", face) : object("west", face, "east", face)));
+				}
+				model(family, "patch_" + layers + "_" + plant, combined);
+			}
 		}
 		model(family, "slab", mesh(family, List.of(new Box(0, 0, 0, 16, 8, 16))));
 		model(family, "slab_top", mesh(family, List.of(new Box(0, 8, 0, 16, 16, 16))));
@@ -122,7 +138,10 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		blockState(family, "block", object("", reference(family, "block")));
 		JsonObject layers = new JsonObject();
 		for (int count = 1; count <= 8; count++) {
-			layers.add("layers=" + count, reference(family, "patch_" + count));
+			layers.add("layers=" + count + ",vegetation=none", reference(family, "patch_" + count));
+			for (String plant : List.of("grass", "fern")) {
+				layers.add("layers=" + count + ",vegetation=" + plant, reference(family, "patch_" + count + "_" + plant));
+			}
 		}
 		blockState(family, "patch", layers);
 		blockState(family, "slab", object("type=bottom", reference(family, "slab"),

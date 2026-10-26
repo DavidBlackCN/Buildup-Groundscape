@@ -31,8 +31,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--minecraft-common-jar", required=True, type=Path)
     parser.add_argument("--evidence-dir", type=Path,
-                        default=Path(__file__).resolve().parents[2] / "docs/evidence/s1-fix",
-                        help="Snapshot directory; defaults to ../docs/evidence/s1-fix outside the repository")
+                        default=Path(__file__).resolve().parents[2] / "docs/evidence/terrain-continuity",
+                        help="Snapshot directory; defaults to ../docs/evidence/terrain-continuity outside the repository")
     args = parser.parse_args()
     evidence = args.evidence_dir
     terrain = {"minecraft:grass_block", "minecraft:podzol", "minecraft:mycelium",

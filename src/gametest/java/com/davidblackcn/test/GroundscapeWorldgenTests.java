@@ -259,7 +259,7 @@ public final class GroundscapeWorldgenTests {
 
     @GameTest
     public void plantsSnowFluidsBlockEntitiesAndHeadroomAreNotOverwritten(GameTestHelper helper) {
-        for (Block obstacle : List.of(Blocks.SHORT_GRASS, Blocks.SNOW, Blocks.CHEST, Blocks.WATER,
+        for (Block obstacle : List.of(Blocks.TALL_GRASS, Blocks.DANDELION, Blocks.SNOW, Blocks.CHEST, Blocks.WATER,
                 Blocks.LAVA, Blocks.STONE)) {
             preparePlateau(helper, SurfaceFamily.GRASS);
             helper.setBlock(TARGET, obstacle);
@@ -272,6 +272,17 @@ public final class GroundscapeWorldgenTests {
             helper.setBlock(TARGET.above(height), Blocks.STONE);
             helper.assertFalse(analyze(helper).accepted(), "low ceiling retains player headroom");
             helper.assertTrue(helper.getBlockState(TARGET).isAir(), "ceiling rejection leaves candidate empty");
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    public void shortGrassAndFernAreEligibleWithoutBeingRemovedByAnalysis(GameTestHelper helper) {
+        for (Block plant : List.of(Blocks.SHORT_GRASS, Blocks.FERN)) {
+            preparePlateau(helper, SurfaceFamily.GRASS);
+            helper.setBlock(TARGET, plant);
+            helper.assertTrue(analyze(helper).accepted(), "supported vegetation may coexist: " + plant);
+            helper.assertBlockPresent(plant, TARGET);
         }
         helper.succeed();
     }

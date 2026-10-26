@@ -68,7 +68,7 @@ public final class SurfaceAnalyzer {
 		if (destination == null) {
 			return reject(Rejection.OUT_OF_BOUNDS);
 		}
-		Rejection occupied = occupiedReason(destination);
+		Rejection occupied = SodPatchBlock.canContain(destination) ? Rejection.NONE : occupiedReason(destination);
 		if (occupied != Rejection.NONE) {
 			return reject(occupied);
 		}
@@ -100,6 +100,9 @@ public final class SurfaceAnalyzer {
 		SurfaceProfile profile = SurfaceProfile.forSurface(ground, biome).orElse(null);
 		if (profile == null) {
 			return reject(Rejection.UNKNOWN_SURFACE);
+		}
+		if (SodPatchBlock.canContain(destination) && (ground.is(Blocks.CRIMSON_NYLIUM) || ground.is(Blocks.WARPED_NYLIUM))) {
+			return reject(Rejection.OCCUPIED);
 		}
 		if (!isFullNaturalSupport(level, groundPos, ground)) {
 			return reject(Rejection.UNSUPPORTED);

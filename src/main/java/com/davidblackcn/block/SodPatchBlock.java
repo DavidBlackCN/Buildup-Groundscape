@@ -18,16 +18,42 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import java.util.ArrayList;
+import java.util.List;
 
 /** A stable decorative surface, with no grass spreading or melting behavior. */
 public final class SodPatchBlock extends Block {
 	public static final int MAX_LAYERS = 8;
 	public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
+	public static final EnumProperty<Vegetation> VEGETATION = EnumProperty.create("vegetation", Vegetation.class);
+	public enum Vegetation implements StringRepresentable {
+		NONE("none"), GRASS("grass"), FERN("fern");
+		private final String name;
+		Vegetation(String name) { this.name = name; }
+		@Override public String getSerializedName() { return name; }
+		public BlockState plant() { return (this == GRASS ? Blocks.SHORT_GRASS : this == FERN ? Blocks.FERN : Blocks.AIR).defaultBlockState(); }
+		public static Vegetation from(BlockState state) {
+			return state.is(Blocks.SHORT_GRASS) ? GRASS : state.is(Blocks.FERN) ? FERN : NONE;
+		}
+	}
+	public static boolean canContain(BlockState state) { return Vegetation.from(state) != Vegetation.NONE; }
 	private static final VoxelShape[] SHAPES = createShapes();
 
 	public SodPatchBlock(BlockBehaviour.Properties properties) {
 		super(properties.isValidSpawn((state, level, pos, entityType) -> false));
-		registerDefaultState(stateDefinition.any().setValue(LAYERS, 1));
+		registerDefaultState(stateDefinition.any().setValue(LAYERS, 1).setValue(VEGETATION, Vegetation.NONE));
 	}
 
 	private static VoxelShape[] createShapes() {
@@ -41,7 +67,9 @@ public final class SodPatchBlock extends Block {
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return SHAPES[state.getValue(LAYERS)];
+		int layers = state.getValue(LAYERS);
+		return state.getValue(VEGETATION) == Vegetation.NONE ? SHAPES[layers]
+				: Shapes.or(SHAPES[layers], Block.box(2, layers * 2, 2, 14, layers * 2 + 13, 14));
 	}
 
 	@Override
@@ -84,7 +112,59 @@ public final class SodPatchBlock extends Block {
 			// The vanilla neighbor-update pipeline destroys this state and evaluates its loot once.
 			return Blocks.AIR.defaultBlockState();
 		}
+		if (direction == Direction.UP && !neighborState.isAir() && state.getValue(VEGETATION) != Vegetation.NONE) {
+			ticks.scheduleTick(pos, this, 1);
+		}
 		return super.updateShape(state, level, ticks, pos, direction, neighborPos, neighborState, random);
+	}
+
+	@Override
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (state.getValue(VEGETATION) != Vegetation.NONE && !level.getBlockState(pos.above()).isAir()) {
+			level.setBlock(pos, state.setValue(VEGETATION, Vegetation.NONE), Block.UPDATE_ALL);
+			Block.dropResources(state.getValue(VEGETATION).plant(), level, pos);
+		}
+	}
+
+	@Override
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+		List<ItemStack> drops = new ArrayList<>(super.getDrops(state, params));
+		if (state.getValue(VEGETATION) != Vegetation.NONE) {
+			// Delegate the plant to its native loot table, retaining tool, fortune and explosion context.
+			try { drops.addAll(state.getValue(VEGETATION).plant().getDrops(params)); }
+			finally { params.withParameter(LootContextParams.BLOCK_STATE, state); }
+		}
+		return drops;
+	}
+
+	@Override
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+			Player player, InteractionHand hand, BlockHitResult hit) {
+		if (stack.is(Items.SHEARS) && state.getValue(VEGETATION) != Vegetation.NONE) {
+			if (level instanceof ServerLevel server) {
+				clipPlant(server, pos, state, player, stack);
+				stack.hurtAndBreak(1, player, hand);
+			}
+			return InteractionResult.SUCCESS;
+		}
+		return super.useItemOn(stack, state, level, pos, player, hand, hit);
+	}
+
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if (state.getValue(VEGETATION) == Vegetation.NONE || !player.getMainHandItem().isEmpty()) return InteractionResult.PASS;
+		if (level instanceof ServerLevel server) clipPlant(server, pos, state, player, ItemStack.EMPTY);
+		return InteractionResult.SUCCESS;
+	}
+
+	private static void clipPlant(ServerLevel level, BlockPos pos, BlockState state, Player player, ItemStack tool) {
+		if (!level.getBlockState(pos).equals(state)) return;
+		level.setBlock(pos, state.setValue(VEGETATION, Vegetation.NONE), Block.UPDATE_ALL);
+		if (!player.isCreative()) {
+			for (ItemStack drop : Block.getDrops(state.getValue(VEGETATION).plant(), level, pos, null, player, tool)) {
+				Block.popResource(level, pos, drop);
+			}
+		}
 	}
 
 	@Override
@@ -109,6 +189,6 @@ public final class SodPatchBlock extends Block {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(LAYERS);
+		builder.add(LAYERS, VEGETATION);
 	}
 }

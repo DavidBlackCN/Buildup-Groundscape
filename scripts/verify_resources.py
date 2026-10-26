@@ -154,18 +154,30 @@ def audit(root):
     model_cache = {}
     for file in (assets / "models" / "block").glob("*.json"):
         model = read(file)
-        model_cache[f"{NAMESPACE}:block/{file.stem}"] = (model, cells(model))
-        exposed_faces(model, model_cache[f"{NAMESPACE}:block/{file.stem}"][1])
+        planes = [e for e in model["elements"] if "rotation" in e]
+        solid = dict(model, elements=[e for e in model["elements"] if "rotation" not in e])
+        model_cache[f"{NAMESPACE}:block/{file.stem}"] = (model, cells(solid))
+        exposed_faces(solid, model_cache[f"{NAMESPACE}:block/{file.stem}"][1])
         family = file.stem.split("_sod_")[0]
         texture = {
             "grass": "grass_block_top", "mycelium": "mycelium_top", "podzol": "podzol_top",
             "crimson_nylium": "crimson_nylium", "warped_nylium": "warped_nylium",
         }[family]
         check(model["textures"]["surface"] == f"minecraft:block/{texture}", "Non-vanilla texture")
-        for element in model["elements"]:
+        for element in solid["elements"]:
             for face in element["faces"].values():
                 check(face.get("tintindex") == (0 if family == "grass" else None), "Incorrect grass tint")
-    check(len(model_cache) == 70, "Expected 70 complete shape models")
+        if planes:
+            layer, plant = file.stem.split("_patch_")[1].split("_")
+            y = int(layer) * 2
+            check(len(planes) == 2 and plant in ("grass", "fern"), "Expected two plant planes")
+            check(model["textures"]["plant"] == "minecraft:block/" + ("short_grass" if plant == "grass" else "fern"), "Plant texture mismatch")
+            for plane in planes:
+                check(plane["from"][1] == y and plane["to"][1] == y + 16, "Plant floats or sinks into sod")
+                check(plane["rotation"] == {"origin": [8, y + 8, 8], "axis": "y", "angle": 45, "rescale": True}, "Plant rotation mismatch")
+                check(all(f["texture"] == "#plant" and f["tintindex"] == 1 and f["uv"] == [0, 0, 16, 16]
+                          and "cullface" not in f for f in plane["faces"].values()), "Plant tint/UV/culling mismatch")
+    check(len(model_cache) == 150, "Expected 70 bare and 80 vegetated models")
 
     state_count = 0
     for family in FAMILIES:
@@ -178,7 +190,7 @@ def audit(root):
             else:
                 check("tints" not in item, "Non-grass item must be untinted")
             variants = read(assets / "blockstates" / (name + ".json"))["variants"]
-            check(len(variants) == {"block": 1, "patch": 8, "slab": 3, "stairs": 40}[form], "Incomplete state variants")
+            check(len(variants) == {"block": 1, "patch": 24, "slab": 3, "stairs": 40}[form], "Incomplete state variants")
             for properties, variant in variants.items():
                 state = dict(part.split("=") for part in properties.split(",")) if properties else {}
                 check(variant["model"] in model_cache, "Missing referenced model")
@@ -189,6 +201,9 @@ def audit(root):
                     start, end = 0, 16
                     if form == "patch":
                         end = int(state["layers"]) * 2
+                        vegetation = state["vegetation"]
+                        suffix = "" if vegetation == "none" else "_" + vegetation
+                        check(variant["model"] == f"{NAMESPACE}:block/{family}_sod_patch_{state['layers']}{suffix}", "Plant state/model mismatch")
                     elif form == "slab":
                         if state["type"] == "top":
                             start = 8
@@ -230,7 +245,7 @@ def audit(root):
     no_spawn = read(root / "data" / "minecraft" / "tags" / "block" / "prevent_mob_spawning_inside.json")
     check(not no_spawn["replace"] and set(no_spawn["values"]) == {identifier(family, "patch") for family in FAMILIES}, "Patch spawn-blocking tag incomplete")
     check(not list(root.rglob("*.png")), "Generated resources must not bundle textures")
-    print(f"PASS: 20 variants, 70 exposed-face meshes, {state_count} geometry states (200 stairs rotations), 40 conserving recipes, 20 loot tables, 2 languages, tool/spawn tags.")
+    print(f"PASS: 20 variants, 150 models including 80 plant composites, {state_count} geometry states (200 stairs rotations), 40 conserving recipes, 20 loot tables, 2 languages, tool/spawn tags.")
 
 
 def audit_native_resources(root, minecraft_client_jar):

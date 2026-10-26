@@ -394,7 +394,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
             timing.addProperty("chunk_x", position[0]);
             timing.addProperty("chunk_z", position[1]);
             timing.addProperty("already_full", loaded);
-            timing.addProperty("structure_protected", SodPatchFeature.hasStructures(chunk));
+            timing.addProperty("has_structure_metadata", SodPatchFeature.hasStructures(chunk));
             timing.addProperty("sample_center", position[0] >= minChunkX && position[0] < minChunkX + 3
                     && position[1] >= minChunkZ && position[1] < minChunkZ + 3);
             timing.addProperty("nanoseconds", elapsed);
@@ -408,6 +408,18 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
             Snapshot afterRejectedRetrofit = capture(chunks, minX, minZ, level.getMinY(),
                     level.getMaxY() - level.getMinY() + 1);
             compare(snapshot, afterRejectedRetrofit, Map.of(), true);
+        }
+        Map<Long, List<net.minecraft.world.level.levelgen.structure.BoundingBox>> pieceBounds = new HashMap<>();
+        for (var entry : chunks.entrySet()) {
+            var cp = entry.getValue().getPos();
+            pieceBounds.put(entry.getKey(), level.structureManager().startsForStructure(cp.x(), cp.z(), structure -> true)
+                    .stream().flatMap(start -> start.getPieces().stream()).map(piece -> piece.getBoundingBox().inflatedBy(2, 3, 2)).toList());
+        }
+        for (int i = 0; i < snapshot.states.length; i++) {
+            if (!snapshot.palette.get(snapshot.states[i]).startsWith("buildup_groundscape:")) continue;
+            BlockPos pos = snapshot.position(i);
+            require(!com.davidblackcn.worldgen.StructureProtection.protects(pieceBounds.get(chunkKey(pos.getX() >> 4, pos.getZ() >> 4)), pos),
+                    "Natural patch intrudes into a structure piece/buffer: " + pos);
         }
         long eligible = 0, biomeGround = 0;
         long safetyAccepted = 0, noiseSelected = 0, unprotectedSelected = 0;
@@ -430,7 +442,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
                     if (familyForGround(material.getBlock()) == null || !level.getBiome(ground).is(scenario.biome)) continue;
                     biomeGround++;
                     BlockState above = level.getBlockState(ground.above());
-                    boolean free = above.isAir() || above.getBlock() instanceof SodPatchBlock;
+                    boolean free = above.isAir() || above.getBlock() instanceof SodPatchBlock || SodPatchBlock.canContain(above);
                     if (free && material.isFaceSturdy(level, ground, Direction.UP)) eligible++;
                     var analysis = SurfaceAnalyzer.analyze(level, ground.above(), pos ->
                             pos.getX() >= minX - 16 && pos.getX() < minX + WIDTH + 16
@@ -444,7 +456,8 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
                         if (terrain != null) {
                             int proposed = SlopePlanner.layers(SEED, x, z, analysis.profile(), terrain, settings);
                             if (proposed > 0) noiseSelected++;
-                            if (!SodPatchFeature.hasStructures(chunks.get(chunkKey(x >> 4, z >> 4)))) {
+                            if (!com.davidblackcn.worldgen.StructureProtection.protects(
+                                    pieceBounds.get(chunkKey(x >> 4, z >> 4)), ground.above())) {
                                 if (proposed > 0) unprotectedSelected++;
                                 long[] counts = terrainMetrics.get(terrain.strength() < .15 ? "flat"
                                         : terrain.strength() < .65 ? "gentle" : "slope");
@@ -500,7 +513,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
         diagnostics.addProperty("chunk_timing_scope", "FULL conversion after serialized native FEATURES prepass");
         diagnostics.addProperty("safe_target_biome_surfaces", safetyAccepted);
         diagnostics.addProperty("noise_selected_target_biome_surfaces", noiseSelected);
-        diagnostics.addProperty("selected_outside_structure_chunks", unprotectedSelected);
+        diagnostics.addProperty("selected_outside_structure_pieces", unprotectedSelected);
         diagnostics.add("rejections", JSON.toJsonTree(rejections));
         diagnostics.addProperty("terrain_metric_columns", "eligible, proposals, actual_layers_1,2,3,4,5,6,7");
         diagnostics.add("terrain_metrics", JSON.toJsonTree(terrainMetrics));
@@ -567,19 +580,23 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
         result.addProperty("camera_y", sample.cameraY);
         result.addProperty("camera_z", sample.cameraZ);
         result.addProperty("eligible_ground", sample.eligible);
-        result.addProperty("eligible_definition", "Vanilla surface family in target biome, sturdy top, air/patch above; excludes further production safety filters");
+        result.addProperty("eligible_definition", "Vanilla surface family in target biome, sturdy top, air/patch/short grass/fern above; excludes further production safety filters");
         result.addProperty("target_biome_ground", sample.biomeGround);
         result.addProperty("sampled_blocks", sample.snapshot.states.length);
         result.addProperty("state_hash", sample.snapshot.hash(Map.of()));
         long patches = 0, nonAir = 0, fluids = 0, snow = 0;
         long[] layers = new long[9];
         JsonObject families = new JsonObject();
+        JsonObject vegetation = new JsonObject();
+        for (var plant : SodPatchBlock.Vegetation.values()) vegetation.addProperty(plant.getSerializedName(), 0);
         Map<SurfaceFamily, Long> familyCounts = new LinkedHashMap<>();
         for (int id : sample.snapshot.states) {
             String state = sample.snapshot.palette.get(id);
             PatchInfo info = patchStates.get(state);
             if (info != null) {
                 patches++;
+                String plant = info.vegetation.getSerializedName();
+                vegetation.addProperty(plant, vegetation.get(plant).getAsLong() + 1);
                 layers[info.layers]++;
                 familyCounts.merge(info.family, 1L, Long::sum);
                 require(info.layers >= 1 && info.layers <= 7, "Natural patch outside layers 1..7");
@@ -596,6 +613,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
         result.addProperty("fluid_blocks", fluids);
         result.addProperty("snow_blocks", snow);
         result.add("patch_families", families);
+        result.add("vegetation", vegetation);
         result.add("layer_histogram", histogram);
         result.add("chunk_timings", sample.timings);
         result.add("surface_diagnostics", sample.diagnostics);
@@ -665,7 +683,11 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
             BlockPos position = actual.position(index);
             require(!exact, "Exact snapshot comparison differs at " + position + ": " + before + " -> " + after);
             PatchInfo patch = patches.get(after);
-            require(isAir(before) && patch != null, "Protected terrain changed at " + position + ": " + before + " -> " + after);
+            require(patch != null, "Unexpected changed block at " + position);
+            String expectedPlant = patch.vegetation == SodPatchBlock.Vegetation.NONE ? ""
+                    : BuiltInRegistries.BLOCK.getKey(patch.vegetation.plant().getBlock()).toString();
+            require(patch.vegetation == SodPatchBlock.Vegetation.NONE ? isAir(before) : blockName(before).equals(expectedPlant),
+                    "Protected terrain/plant changed at " + position + ": " + before + " -> " + after);
             require(position.getY() > actual.minY, "Patch at minimum build height");
             String support = baseline.palette.get(baseline.states[index - 1]);
             String expected = BuiltInRegistries.BLOCK.getKey(patch.family.vanillaBlock()).toString();
@@ -683,7 +705,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
         Map<String, PatchInfo> result = new HashMap<>();
         for (var variant : GroundscapeBlocks.variants()) {
             for (BlockState state : variant.patch().getStateDefinition().getPossibleStates()) {
-                result.put(stateName(state), new PatchInfo(variant.family(), state.getValue(SodPatchBlock.LAYERS)));
+                result.put(stateName(state), new PatchInfo(variant.family(), state.getValue(SodPatchBlock.LAYERS), state.getValue(SodPatchBlock.VEGETATION)));
             }
         }
         return result;
@@ -717,7 +739,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
         Path directory = Path.of("").toAbsolutePath().normalize();
         while (directory != null && !Files.exists(directory.resolve("build.gradle"))) directory = directory.getParent();
         require(directory != null, "Cannot locate target-version project directory");
-        return directory.getParent().resolve("docs/evidence/s1-fix");
+        return directory.getParent().resolve("docs/evidence/terrain-continuity");
     }
 
     private static JsonObject readJson(Path path) {
@@ -786,7 +808,7 @@ public final class GroundscapeWorldgenClientTest implements FabricClientGameTest
     }
 
     private record Scenario(String name, ResourceKey<Level> dimension, ResourceKey<Biome> biome, int ordinal) { }
-    private record PatchInfo(SurfaceFamily family, int layers) { }
+    private record PatchInfo(SurfaceFamily family, int layers, SodPatchBlock.Vegetation vegetation) { }
     private record Comparison(int changed, String protectedHash) { }
     private record Sample(Scenario scenario, BlockPos anchor, Snapshot snapshot, JsonArray timings, JsonObject diagnostics,
                           long eligible, long biomeGround, double cameraX, double cameraY, double cameraZ) { }

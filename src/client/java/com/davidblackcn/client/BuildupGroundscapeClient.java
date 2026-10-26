@@ -17,5 +17,10 @@ public class BuildupGroundscapeClient implements ClientModInitializer {
 		// It also colors terrain particles; the item tint is generated separately in items/*.json.
 		BlockColorRegistry.register(List.of(BlockTintSources.grass()),
 				grass.block(), grass.patch(), grass.slab(), grass.stairs());
+		for (var variant : GroundscapeBlocks.variants()) {
+			// Plant planes use index 1; non-grass sod faces remain untinted in their models.
+			BlockColorRegistry.register(List.of(variant.family().usesGrassTint()
+					? BlockTintSources.grass() : BlockTintSources.constant(-1), BlockTintSources.grass()), variant.patch());
+		}
 	}
 }

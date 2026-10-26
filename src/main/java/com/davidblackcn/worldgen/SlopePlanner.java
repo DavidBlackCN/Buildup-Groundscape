@@ -26,40 +26,24 @@ public final class SlopePlanner {
 				distanceToStep = Math.max(1, projection);
 			}
 		}
-		// A verified step is a complete ramp opportunity even on a broad gentle hill.
-		// Giving its near/far columns different coverage thresholds can invert them.
-		if (terrain.hasUphillStep()) slope = 1;
+		if (terrain.hasUphillStep()) {
+			// Every safe ramp participates. Noise varies thickness instead of deleting hillsides.
+			double detail = SurfaceNoise.heightDetail(seed, anchorX, anchorZ);
+			double relief = Math.clamp((3 - distanceToStep) / 2, 0, 1);
+			double variation = 0.7 + (detail - 0.5) * (0.3 + config.heightVariation() * 0.8);
+			double densityScale = Math.clamp(config.density() / 0.12, 0.2, 1.3);
+			double strength = relief * variation * config.layerScale()
+					* (0.65 + config.slopeInfluence() * 0.35 / 0.55) * densityScale;
+			// Scale the whole profile into the requested range; never clamp 4..7 into a 3-layer plateau.
+			double normalized = Math.pow(Math.clamp(strength, 0, 1), 1.5);
+			return Math.min(config.maxLayers(), 1 + (int) Math.floor(normalized * config.maxLayers()));
+		}
+		// Sparse flat decoration retains the original coverage controls.
 		double threshold = 0.84 - config.density() * 1.2
-				- config.slopeInfluence() * slope * 0.32
-				+ (1 - config.flatCoverage()) * (1 - slope) * 0.08
-				+ (1 - profile.coverageScale()) * 0.10;
-		double interior = (SurfaceNoise.densityScore(seed, anchorX, anchorZ) - threshold) / 0.16;
+				+ (1 - config.flatCoverage()) * 0.08 + (1 - profile.coverageScale()) * 0.10;
+		double interior = Math.clamp((SurfaceNoise.densityScore(seed, x, z) - threshold) / 0.16, 0, 1);
 		if (interior <= 0) return 0;
-		interior = smooth(Math.min(1, interior));
-		// Shorter coverage patches still need gradual edges. This bounded envelope
-		// limits the field's change to 1/4 per block without reading any terrain.
-		// It also keeps isolated selected cells low instead of making tall spikes.
-		for (int dx = -3; dx <= 3; dx++) {
-			for (int dz = -3; dz <= 3; dz++) {
-				int distance = Math.abs(dx) + Math.abs(dz);
-				if (distance == 0 || distance > 3 || interior <= distance * 0.25) continue;
-				double neighbor = Math.clamp((SurfaceNoise.densityScore(seed, anchorX + dx, anchorZ + dz) - threshold) / 0.16, 0, 1);
-				interior = Math.min(interior, smooth(neighbor) + distance * 0.25);
-			}
-		}
-		double detail = SurfaceNoise.heightDetail(seed, anchorX, anchorZ);
-		if (!terrain.hasUphillStep()) {
-			// Sparse flat decoration remains possible, but cannot build a high crest.
-			return Math.min(config.maxLayers(), 1 + (int) Math.floor(detail * interior + 0.5));
-		}
-		double variation = 1 - config.heightVariation() * (1 - detail) * 0.3;
-		double thickness = 6.0 / distanceToStep * config.layerScale() * variation;
-		// Quantize around half a layer so short ramps do not collapse mostly to one
-		// layer. Coverage and the downhill-edge exclusion remain unchanged.
-		return Math.min(config.maxLayers(), Math.max(1, (int) Math.ceil(0.5 + (thickness - 0.5) * interior)));
-	}
-
-	private static double smooth(double t) {
-		return t * t * (3 - 2 * t);
+		double detail = SurfaceNoise.heightDetail(seed, x, z);
+		return Math.min(config.maxLayers(), 1 + (int) Math.floor(detail * interior + 0.5));
 	}
 }

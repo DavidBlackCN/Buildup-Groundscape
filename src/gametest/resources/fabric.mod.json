@@ -5,7 +5,7 @@
   "name": "Buildup Groundscape Tests",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": ["com.davidblackcn.test.GroundscapeGameTests", "com.davidblackcn.test.GroundscapeMapTests", "com.davidblackcn.test.GroundscapeWorldgenTests", "com.davidblackcn.test.GroundscapeSlopeTests"],
+    "fabric-gametest": ["com.davidblackcn.test.GroundscapeGameTests", "com.davidblackcn.test.GroundscapeMapTests", "com.davidblackcn.test.GroundscapeWorldgenTests", "com.davidblackcn.test.GroundscapeSlopeTests", "com.davidblackcn.test.GroundscapeContinuityTests"],
     "fabric-client-gametest": ["com.davidblackcn.test.GroundscapeClientTest", "com.davidblackcn.test.GroundscapeWorldgenClientTest"]
   },
   "depends": {"buildup_groundscape": "*"}

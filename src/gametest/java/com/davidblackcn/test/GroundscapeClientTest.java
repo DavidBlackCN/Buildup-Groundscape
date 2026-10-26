@@ -38,7 +38,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             save = world.getWorldSave();
             var server = world.getServer();
             var connection = world.getConnection();
-            server.runCommand("fill -4 4 -4 52 4 30 minecraft:stone");
+            server.runCommand("fill -4 4 -4 52 4 40 minecraft:stone");
             server.runCommand("time set noon");
             server.runCommand("weather clear");
             server.runCommand("gamemode spectator @a");
@@ -52,7 +52,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                         for (var state : block.getStateDefinition().getPossibleStates()) {
                             if (state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)
                                     && state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)) continue;
-                            var pos = new BlockPos(column % 25 * 2, 5, row * 6 + column / 25 * 2);
+                            var pos = new BlockPos(column % 25 * 2, 5, row * 8 + column / 25 * 2);
                             s.overworld().setBlock(pos, state, 2);
                             showcase.put(pos, state);
                             column++;
@@ -61,19 +61,33 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                     row++;
                 }
             });
-            require(showcase.size() == 260, "Showcase includes every dry block state without overlaps");
+            require(showcase.size() == 340, "Showcase includes every dry block state without overlaps");
             context.waitTick();
             connection.waitForClientboundPackets();
             connection.waitForChunksRender();
             checkModels(context);
             checkStates(context, showcase);
             for (String biome : new String[]{"minecraft:plains", "minecraft:swamp", "minecraft:badlands"}) {
-                server.runCommand("fillbiome -4 0 -4 52 16 30 " + biome);
+                server.runCommand("fillbiome -4 0 -4 52 16 40 " + biome);
                 context.waitTicks(5);
                 connection.waitForClientboundPackets();
                 checkGrassTint(context, new BlockPos(0, 5, 0));
             }
             context.takeScreenshot("groundscape-showcase");
+            server.runCommand("fill 59 4 0 75 4 8 minecraft:grass_block");
+            server.runCommand("fillbiome 59 0 0 75 16 8 minecraft:plains");
+            server.runOnServer(s -> {
+                for (int i = 0; i < 4; i++) for (var vegetation : SodPatchBlock.Vegetation.values()) {
+                    var pos = new BlockPos(61 + i * 3, 5, 1 + vegetation.ordinal() * 3);
+                    var state = GroundscapeBlocks.get(SurfaceFamily.GRASS).patch().defaultBlockState()
+                            .setValue(SodPatchBlock.LAYERS, 1 + i * 2).setValue(SodPatchBlock.VEGETATION, vegetation);
+                    s.overworld().setBlock(pos, state, 2); showcase.put(pos, state);
+                }
+            });
+            server.runCommand("tp @a 66 9 15 180 27");
+            context.waitTicks(5); connection.waitForClientboundPackets(); connection.waitForChunksRender();
+            context.takeScreenshot("groundscape-vegetation");
+            server.runCommand("tp @a 24 25 42 180 38");
             checkTexturePack(context, connection);
         }
         // Actual world close/reopen, not merely a codec round trip.
@@ -209,8 +223,15 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
                     if (variant.family().usesGrassTint()) {
                         require(colors.getTintSource(state, 0).colorInWorld(state, client.level, pos) == expected,
                                 "Grass tint differs from vanilla: " + state);
+                    } else if (block instanceof SodPatchBlock) {
+                        require(colors.getTintSource(state, 0).colorInWorld(state, client.level, pos) == -1,
+                                "Non-grass sod retains neutral particle tint: " + state);
                     } else {
                         require(colors.getTintSources(state).isEmpty(), "Unexpected grass tint: " + state);
+                    }
+                    if (block instanceof SodPatchBlock) {
+                        require(colors.getTintSource(state, 1).colorInWorld(state, client.level, pos) == expected,
+                                "Plant tint differs from native biome grass: " + state);
                     }
                 }
             }

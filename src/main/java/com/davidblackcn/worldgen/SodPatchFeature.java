@@ -22,6 +22,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 import java.util.function.Predicate;
+import java.util.List;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 /** Feature admission followed by decoration after every neighbouring native feature is complete. */
 public record SodPatchFeature() implements Feature {
@@ -45,9 +47,12 @@ public record SodPatchFeature() implements Feature {
 		// This overload requests EMPTY, not FULL or the in-progress FEATURES status.
 		ChunkAccess chunk = region.getChunk(center.x(), center.z());
 		if (!supportedDimension(region.getLevel()) || chunk.isUpgrading() || chunk.isOldNoiseGeneration()
-				|| chunk.getPersistedStatus().isOrAfter(ChunkStatus.FEATURES) || hasStructures(chunk)) {
+				|| chunk.getPersistedStatus().isOrAfter(ChunkStatus.FEATURES)) {
 			return false;
 		}
+		List<BoundingBox> bounds = StructureProtection.capture(region, chunk);
+		if (bounds == null) return false;
+		chunk.setAttached(GroundscapeWorldgen.STRUCTURE_BOUNDS, bounds);
 		// Adjacent FEATURES tasks may still place native vegetation in this chunk.
 		// Preserve real biome/datapack feature admission without changing their inputs.
 		chunk.setAttached(GroundscapeWorldgen.PENDING_PATCHES, Boolean.TRUE);
@@ -61,11 +66,15 @@ public record SodPatchFeature() implements Feature {
 		}
 		// Consume even if configuration changed while the ProtoChunk was saved on disk.
 		chunk.removeAttached(GroundscapeWorldgen.PENDING_PATCHES);
+		List<BoundingBox> bounds = chunk.getAttached(GroundscapeWorldgen.STRUCTURE_BOUNDS);
+		chunk.removeAttached(GroundscapeWorldgen.STRUCTURE_BOUNDS);
 		GroundscapeWorldgenConfig config = GroundscapeWorldgenConfig.current();
 		if (!config.enabled() || config.density() == 0 || !supportedDimension(level)
-				|| chunk.isUpgrading() || chunk.isOldNoiseGeneration() || hasStructures(chunk)) {
+				|| chunk.isUpgrading() || chunk.isOldNoiseGeneration()) {
 			return;
 		}
+		// Old pending ProtoChunks have no piece snapshot; retain their conservative protection.
+		if (bounds == null && hasStructures(chunk)) return;
 		// FULL depends on LIGHT, whose radius-one INITIALIZE_LIGHT dependencies
 		// guarantee all eight neighbours have completed FEATURES. Capture only
 		// already-present results; never request FULL from this callback itself.
@@ -74,7 +83,7 @@ public record SodPatchFeature() implements Feature {
 			BuildupGroundscape.LOGGER.debug("Skipped sod decoration {}: finalized neighbours unavailable", chunk.getPos());
 			return;
 		}
-		GenerationStatistics result = decorate(level, chunk, view, config);
+		GenerationStatistics result = decorate(level, chunk, view, config, bounds == null ? List.of() : bounds);
 		BuildupGroundscape.LOGGER.debug("Sod decoration {}: {}", chunk.getPos(), result);
 	}
 
@@ -88,7 +97,7 @@ public record SodPatchFeature() implements Feature {
 	}
 
 	private static GenerationStatistics decorate(ServerLevel level, LevelChunk chunk,
-			FinalizedChunkView view, GroundscapeWorldgenConfig config) {
+			FinalizedChunkView view, GroundscapeWorldgenConfig config, List<BoundingBox> bounds) {
 		long started = System.nanoTime();
 		ChunkPos center = chunk.getPos();
 		boolean nether = level.dimension().equals(Level.NETHER);
@@ -107,7 +116,7 @@ public record SodPatchFeature() implements Feature {
 					int y = chunk.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, dx, dz) + 1;
 					BlockPos target = new BlockPos(x, y, z);
 					candidates++;
-					if (tryPlace(level, chunk, view, target, config, budget)) {
+					if (!StructureProtection.protects(bounds, target) && tryPlace(level, chunk, view, target, config, budget)) {
 						placed++;
 					} else {
 						rejected++;
@@ -128,7 +137,7 @@ public record SodPatchFeature() implements Feature {
 							continue;
 						}
 						candidates++;
-						if (tryPlace(level, chunk, view, groundPos.above(), config, budget)) {
+						if (!StructureProtection.protects(bounds, groundPos.above()) && tryPlace(level, chunk, view, groundPos.above(), config, budget)) {
 							placed++;
 							break; // At most one decoration per column, also in multi-floor caverns.
 						}
@@ -141,7 +150,7 @@ public record SodPatchFeature() implements Feature {
 				budget.exhausted(), false, System.nanoTime() - started);
 	}
 
-	/** Conservative chunk-wide protection avoids resolving references into distant chunks. */
+	/** Metadata diagnostic and fallback for pre-1.3 pending chunks, not a current generation veto. */
 	public static boolean hasStructures(ChunkAccess chunk) {
 		return !chunk.getAllStarts().isEmpty()
 				|| chunk.getAllReferences().values().stream().anyMatch(references -> !references.isEmpty());
@@ -157,16 +166,19 @@ public record SodPatchFeature() implements Feature {
 		if (terrain == null) return false;
 		int layers = SlopePlanner.layers(level.getSeed(), target.getX(), target.getZ(),
 				analysis.profile(), terrain, config);
-		if (layers == 0 || !budget.test(target) || !view.getBlockState(target).isAir()) {
+		if (layers == 0 || !budget.test(target)) {
 			return false;
 		}
+		BlockState original = view.getBlockState(target);
+		if (!original.isAir() && !SodPatchBlock.canContain(original)) return false;
 		ChunkPos center = chunk.getPos();
 		if ((target.getX() >> 4) != center.x() || (target.getZ() >> 4) != center.z()
 				|| !chunk.isInsideBuildHeight(target)) {
 			return false;
 		}
 		BlockState patch = GroundscapeBlocks.get(analysis.profile().family()).patch().defaultBlockState()
-				.setValue(SodPatchBlock.LAYERS, layers);
+				.setValue(SodPatchBlock.LAYERS, layers)
+				.setValue(SodPatchBlock.VEGETATION, SodPatchBlock.Vegetation.from(original));
 		// The supplied FULL chunk has not yet been published to clients. This native
 		// setter updates its heightmaps, sky-light sources, light checks and save flag;
 		// using level.setBlock here would recursively request this pending FULL future.

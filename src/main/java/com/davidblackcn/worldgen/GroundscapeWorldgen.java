@@ -13,12 +13,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import java.util.List;
 
 /** Registers the 26.3 feature codec independently of the experimental enable flag. */
 public final class GroundscapeWorldgen {
 	/** Persisted only while a real Feature-approved ProtoChunk awaits its first FULL conversion. */
 	public static final AttachmentType<Boolean> PENDING_PATCHES = AttachmentRegistry.createPersistent(
 			BuildupGroundscape.id("pending_natural_sod_patches"), Codec.BOOL);
+	public static final AttachmentType<List<BoundingBox>> STRUCTURE_BOUNDS = AttachmentRegistry.createPersistent(
+			BuildupGroundscape.id("pending_sod_structure_bounds"), BoundingBox.CODEC.listOf());
 	public static final ResourceKey<PlacedFeature> NATURAL_SOD_PATCHES = ResourceKey.create(
 			Registries.PLACED_FEATURE, BuildupGroundscape.id("natural_sod_patches"));
 
