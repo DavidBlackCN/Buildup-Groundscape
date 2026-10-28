@@ -28,7 +28,7 @@ public final class LeafPatchBlock extends Block {
     }
     @Override
     protected boolean canBeReplaced(BlockState state, net.minecraft.world.level.material.Fluid fluid) {
-        return fluid.is(net.minecraft.tags.FluidTags.WATER) || super.canBeReplaced(state, fluid);
+        return fluid.is(net.minecraft.tags.FluidTags.WATER) ? !PatchWaterRules.blocksWater(state) : super.canBeReplaced(state, fluid);
     }
 
     @Override protected VoxelShape getShape(BlockState s, BlockGetter l, BlockPos p, CollisionContext c) { return SHAPES[s.getValue(LAYERS)]; }

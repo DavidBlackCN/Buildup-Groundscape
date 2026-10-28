@@ -61,7 +61,7 @@ public final class GroundscapePatchConfigTests {
         h.succeed();
     }
     @GameTest
-    public void waterFlowsAcrossAndDownThroughAllPatchHeights(GameTestHelper h) {
+    public void waterOnlyWashesFirstThreeLayersAcrossAndDown(GameTestHelper h) {
         var level = h.getLevel(); var pos = h.absolutePos(CELL);
         for (Block patch : patches()) for (int n = 1; n <= 8; n++) for (boolean falling : List.of(false, true)) {
             reset(h);
@@ -72,31 +72,65 @@ public final class GroundscapePatchConfigTests {
             level.setBlock(source, Blocks.WATER.defaultBlockState(), 3);
             h.assertTrue(level.getBlockState(pos).is(patch), "adjacent water alone does not erase patches");
             Fluids.WATER.tick(level, source, level.getBlockState(source), level.getFluidState(source));
-            h.assertTrue(level.getBlockState(pos).is(Blocks.WATER), "water entered " + patch + " layers=" + n + " falling=" + falling);
+            h.assertValueEqual(level.getBlockState(pos), n < 4 ? level.getFluidState(pos).createLegacyBlock() : state, "water threshold " + patch + " layers=" + n + " falling=" + falling);
+            h.assertTrue(n < 4 ? level.getFluidState(pos).is(net.minecraft.tags.FluidTags.WATER) : level.getFluidState(pos).isEmpty(), "only thin patches admit water");
             h.assertTrue(level.getBlockState(pos.below()).is(Blocks.STONE), "substrate unchanged");
             h.assertTrue(level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3)).isEmpty(), "water does not bypass silk touch");
         }
         h.succeed();
     }
     @GameTest
-    public void bucketsReplacePatchesAndWaterPreservesPlantLootOnly(GameTestHelper h) {
+    public void bucketsRespectLayerThresholdAndPlantsSurviveBesideWater(GameTestHelper h) {
         var level = h.getLevel(); var pos = h.absolutePos(CELL);
         for (Block patch : patches()) for (int n = 1; n <= 8; n++) {
             reset(h);
             level.setBlock(pos, patch.defaultBlockState().setValue(BlockStateProperties.LAYERS, n), 2);
-            h.assertTrue(((BucketItem) Items.WATER_BUCKET).emptyContents(null, level, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)), "bucket replaces patch");
-            h.assertTrue(level.getBlockState(pos).is(Blocks.WATER), "bucket leaves water, no waterlogged patch");
+            boolean placed = ((BucketItem) Items.WATER_BUCKET).emptyContents(null, level, pos, null);
+            h.assertValueEqual(placed, n < 4, "bucket directly enters only layers 1-3");
+            h.assertTrue(n < 4 ? level.getBlockState(pos).is(Blocks.WATER) : level.getBlockState(pos).is(patch), "bucket respects thick patches");
+            if (n >= 4) {
+                h.assertTrue(((BucketItem) Items.WATER_BUCKET).emptyContents(null, level, pos, new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)), "blocked bucket may place water above as vanilla does");
+                h.assertTrue(level.getBlockState(pos.above()).is(Blocks.WATER), "fallback water above");
+                h.assertValueEqual(level.getBlockState(pos), patch.defaultBlockState().setValue(BlockStateProperties.LAYERS, n), "fallback does not erase thick patch");
+            }
             h.assertTrue(level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3)).isEmpty(), "bucket drops no patch");
         }
-        for (var plant : List.of(SodPatchBlock.Vegetation.DANDELION, SodPatchBlock.Vegetation.WILDFLOWERS_NORTH_4)) {
+        for (var plant : List.of(SodPatchBlock.Vegetation.DANDELION, SodPatchBlock.Vegetation.WILDFLOWERS_NORTH_4)) for (int n = 1; n <= 8; n++) {
             reset(h);
             var patch = GroundscapeBlocks.get(SurfaceFamily.GRASS).patch();
-            level.setBlock(pos, patch.defaultBlockState().setValue(SodPatchBlock.LAYERS, 8).setValue(SodPatchBlock.VEGETATION, plant), 2);
-            level.setBlock(pos.above(), Blocks.WATER.defaultBlockState(), 2);
-            Fluids.WATER.tick(level, pos.above(), level.getBlockState(pos.above()), level.getFluidState(pos.above()));
+            var composite = patch.defaultBlockState().setValue(SodPatchBlock.LAYERS, n).setValue(SodPatchBlock.VEGETATION, plant);
+            level.setBlock(pos, composite, 2);
+            var source = pos.west();
+            for (BlockPos wall : List.of(source.west(), source.north(), source.south(), pos.east(), pos.north(), pos.south())) level.setBlock(wall, Blocks.STONE.defaultBlockState(), 2);
+            level.setBlock(source, Blocks.WATER.defaultBlockState(), 3);
+            Fluids.WATER.tick(level, source, level.getBlockState(source), level.getFluidState(source));
+            if (n >= 4) h.assertValueEqual(level.getBlockState(pos), composite, "thick composite and plant retained");
             var items = level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3));
             h.assertTrue(items.stream().allMatch(e -> e.getItem().is(plant.plant().getBlock().asItem())), "only native plant loot survives washing");
-            h.assertValueEqual(items.stream().mapToInt(e -> e.getItem().getCount()).sum(), plant == SodPatchBlock.Vegetation.DANDELION ? 1 : 4, "plant count retained");
+            h.assertValueEqual(items.stream().mapToInt(e -> e.getItem().getCount()).sum(), n >= 4 ? 0 : plant == SodPatchBlock.Vegetation.DANDELION ? 1 : 4, "plant loot only when thin composite washes away");
+        }
+        h.succeed();
+    }
+    @GameTest
+    public void waterResistanceTracksCurrentLayerCount(GameTestHelper h) {
+        var level = h.getLevel(); var pos = h.absolutePos(CELL); var source = pos.west();
+        for (Block patch : patches()) {
+            reset(h);
+            for (BlockPos wall : List.of(source.west(), source.north(), source.south(), pos.east(), pos.north(), pos.south()))
+                level.setBlock(wall, Blocks.STONE.defaultBlockState(), 2);
+            var three = patch.defaultBlockState().setValue(BlockStateProperties.LAYERS, 3);
+            var four = three.setValue(BlockStateProperties.LAYERS, 4);
+            level.setBlock(pos, three, 2);
+            level.setBlock(source, Blocks.WATER.defaultBlockState(), 3);
+            // Stacking before the next fluid tick immediately protects the patch.
+            level.setBlock(pos, four, 3);
+            for (int tick = 0; tick < 3; tick++) Fluids.WATER.tick(level, source, level.getBlockState(source), level.getFluidState(source));
+            h.assertValueEqual(level.getBlockState(pos), four, "four layers resist repeated water ticks");
+            // No cached block-type decision: returning to three layers allows the existing water in.
+            level.setBlock(pos, three, 3);
+            Fluids.WATER.tick(level, source, level.getBlockState(source), level.getFluidState(source));
+            h.assertTrue(level.getBlockState(pos).is(Blocks.WATER), "three layers wash away after height change");
+            h.assertTrue(level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3)).isEmpty(), "threshold transitions do not duplicate items");
         }
         h.succeed();
     }

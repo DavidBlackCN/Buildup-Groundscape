@@ -134,7 +134,7 @@ public final class SodPatchBlock extends Block implements net.minecraft.world.le
 
     @Override
     protected boolean canBeReplaced(BlockState state, net.minecraft.world.level.material.Fluid fluid) {
-        return fluid.is(net.minecraft.tags.FluidTags.WATER) || super.canBeReplaced(state, fluid);
+        return fluid.is(net.minecraft.tags.FluidTags.WATER) ? !PatchWaterRules.blocksWater(state) : super.canBeReplaced(state, fluid);
     }
 
 	private static VoxelShape[] createShapes() {

@@ -82,10 +82,10 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
             checkModels(context);
             checkStates(context, showcase);
             for (String biome : new String[]{"minecraft:plains", "minecraft:swamp", "minecraft:badlands"}) {
-                server.runCommand("fillbiome -4 0 -4 80 96 80 " + biome);
+                server.runCommand("fillbiome -4 0 -4 8 16 8 " + biome);
                 context.waitTicks(5);
                 connection.waitForClientboundPackets();
-                checkGrassTint(context, new BlockPos(0, 5, 0));
+                checkGrassTint(context, new BlockPos(0, 5, 0), biome);
             }
             screenshot(context, "groundscape-showcase");
             server.runCommand("fill 90 4 0 116 4 26 minecraft:grass_block");
@@ -357,8 +357,11 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
         };
     }
 
-    private static void checkGrassTint(ClientGameTestContext context, BlockPos pos) {
+    private static void checkGrassTint(ClientGameTestContext context, BlockPos pos, String biome) {
         context.runOnClient(client -> {
+            require(client.level.getBiome(pos).is(net.minecraft.resources.ResourceKey.create(
+                    net.minecraft.core.registries.Registries.BIOME,
+                    Identifier.withDefaultNamespace(biome.substring("minecraft:".length())))), "requested biome actually applied");
             var colors = client.getBlockColors();
             for (var family : com.davidblackcn.registry.LeafFamily.values()) {
                 var nativeState = family.source().defaultBlockState();
