@@ -7,7 +7,7 @@
 	"authors": [
 		"DavidBlackCN"
 	],
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/buildup_groundscape/icon.png",
 	"environment": "*",
 	"mixins": ["buildup_groundscape.mixins.json"],
