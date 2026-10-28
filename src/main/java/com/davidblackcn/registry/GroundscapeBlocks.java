@@ -64,7 +64,7 @@ public final class GroundscapeBlocks {
 			Function<BlockBehaviour.Properties, T> factory) {
 		Identifier id = BuildupGroundscape.id(family.path(shape));
 		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
-		T block = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(family.properties().setId(blockKey)));
+		T block = Registry.register(BuiltInRegistries.BLOCK, blockKey, factory.apply(family.properties(!shape.equals("patch")).setId(blockKey)));
 		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
 		Registry.register(BuiltInRegistries.ITEM, itemKey,
 				new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));

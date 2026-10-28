@@ -5,8 +5,8 @@
   "name": "Buildup Groundscape Tests",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": ["com.davidblackcn.test.GroundscapeGameTests", "com.davidblackcn.test.GroundscapeMapTests", "com.davidblackcn.test.GroundscapeWorldgenTests", "com.davidblackcn.test.GroundscapeSlopeTests", "com.davidblackcn.test.GroundscapeContinuityTests", "com.davidblackcn.test.GroundscapeMaterialTests", "com.davidblackcn.test.GroundscapePlantBreakingTests", "com.davidblackcn.test.GroundscapeVegetationLeafTests"],
-    "fabric-client-gametest": ["com.davidblackcn.test.GroundscapeClientTest", "com.davidblackcn.test.GroundscapeWorldgenClientTest", "com.davidblackcn.test.GroundscapeLeafWorldgenClientTest"]
+    "fabric-gametest": ["com.davidblackcn.test.GroundscapeGameTests", "com.davidblackcn.test.GroundscapeMapTests", "com.davidblackcn.test.GroundscapeWorldgenTests", "com.davidblackcn.test.GroundscapeSlopeTests", "com.davidblackcn.test.GroundscapeContinuityTests", "com.davidblackcn.test.GroundscapeMaterialTests", "com.davidblackcn.test.GroundscapePlantBreakingTests", "com.davidblackcn.test.GroundscapeVegetationLeafTests", "com.davidblackcn.test.GroundscapePatchConfigTests"],
+    "fabric-client-gametest": ["com.davidblackcn.test.GroundscapeClientTest", "com.davidblackcn.test.GroundscapeWorldgenClientTest", "com.davidblackcn.test.GroundscapeLeafWorldgenClientTest", "com.davidblackcn.test.GroundscapeConfigClientTest"]
   },
   "depends": {"buildup_groundscape": "*"}
 }

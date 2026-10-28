@@ -13,6 +13,7 @@ public class BuildupGroundscape implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+        com.davidblackcn.config.ConfigNetworking.initialize();
 		GroundscapeBlocks.initialize();
         com.davidblackcn.registry.GroundscapeLeaves.initialize();
 		GroundscapeWorldgen.initialize();

@@ -105,7 +105,7 @@ public final class GroundscapeContinuityTests {
                 var drops = Block.getDrops(state, level, pos, null, null, new ItemStack(Items.SHEARS));
                 int sod = drops.stream().filter(i -> i.is(variant.patch().asItem())).mapToInt(ItemStack::getCount).sum();
                 int plants = drops.stream().filter(i -> i.is(plant.plant().getBlock().asItem())).mapToInt(ItemStack::getCount).sum();
-                h.assertValueEqual(sod, n, "breaking composite conserves sod");
+                h.assertValueEqual(sod, 0, "ordinary shears do not recover the patch");
                 h.assertValueEqual(plants, 1, "native shears loot returns the plant once");
             }
         }

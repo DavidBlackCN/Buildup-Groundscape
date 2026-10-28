@@ -125,14 +125,18 @@ def matches(condition, state):
     return all(state.get(key) == value for key, value in condition["state"].items())
 
 
-def loot_count(entry, state):
+def loot_count(entry, state, silk=True):
+    if entry.get("condition") == "minecraft:tool/can_silk_touch":
+        if not silk:
+            return 0
+        entry = {k: v for k, v in entry.items() if k != "condition"}
     if "condition" in entry:
         condition = entry["condition"]
         if condition["type"] == "minecraft:match_block" and not matches(condition, state):
             return None
         check(condition["type"] in {"minecraft:match_block", "minecraft:survives_explosion"}, "Unexpected loot condition")
     if entry["type"] == "minecraft:alternatives":
-        counts = [loot_count(child, state) for child in entry["children"]]
+        counts = [loot_count(child, state, silk) for child in entry["children"]]
         counts = [count for count in counts if count is not None]
         check(len(counts) == 1, "Loot must select exactly one branch")
         return counts[0]
@@ -268,6 +272,8 @@ def audit(root):
             entry = pools[0]["entries"][0]
             state_expectations = [({}, 1)]
             if form == "patch":
+                check(entry.get("condition") == "minecraft:tool/can_silk_touch", "Patch requires silk touch")
+                check(loot_count(entry, {"layers": "8"}, False) == 0, "No ordinary patch drops")
                 state_expectations = [({"layers": str(layer)}, layer) for layer in range(1, 9)]
             elif form == "slab":
                 state_expectations = [({"type": half}, 2 if half == "double" else 1) for half in ("bottom", "top", "double")]
@@ -302,15 +308,19 @@ def audit(root):
         check(advancement["rewards"]["recipes"] == [f"{NAMESPACE}:{file.stem}"], "Recipe unlock mismatch")
     for tool, families in (("shovel", FAMILIES[:3] + FAMILIES[5:]), ("pickaxe", FAMILIES[3:5])):
         values = read(root / "data" / "minecraft" / "tags" / "block" / "mineable" / (tool + ".json"))
-        check(not values["replace"] and set(values["values"]) == {identifier(family, form) for family in families for form in forms(family)}, "Incorrect mining tags")
+        check(not values["replace"] and set(values["values"]) == {identifier(family, form) for family in families for form in forms(family) if form != "patch"}, "Incorrect mining tags")
     no_spawn = read(root / "data" / "minecraft" / "tags" / "block" / "prevent_mob_spawning_inside.json")
     check(not no_spawn["replace"] and set(no_spawn["values"]) == {identifier(family, "patch") for family in FAMILIES} | {f"{NAMESPACE}:{f}_leaves_patch" for f in LEAVES}, "Patch spawn-blocking tag incomplete")
+    for tag in ("mineable/hoe", "washed_away_by_fluids"):
+        check(read(root / "data/minecraft/tags/block" / (tag + ".json"))["values"] == no_spawn["values"], "All patches share moss tool and fluid tags")
     check(not list(root.rglob("*.png")), "Generated resources must not bundle textures")
     for family in LEAVES:
         name = family + "_leaves_patch"
         variants = read(assets / "blockstates" / (name + ".json"))["variants"]
         check(len(variants) == 8, "Leaf layer variants")
         entry = read(data / "loot_table" / "blocks" / (name + ".json"))["pools"][0]["entries"][0]
+        check(entry.get("condition") == "minecraft:tool/can_silk_touch", "Leaves require silk touch")
+        check(loot_count(entry, {"layers": "8"}, False) == 0, "No ordinary leaf drops")
         for n in range(1, 9):
             model_id = variants[f"layers={n}"]["model"]
             check(model_cache[model_id][1] == set(itertools.product(range(16), range(n * 2), range(16))), "Leaf collision geometry")

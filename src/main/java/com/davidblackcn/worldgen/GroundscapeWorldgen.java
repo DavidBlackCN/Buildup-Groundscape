@@ -34,11 +34,10 @@ public final class GroundscapeWorldgen {
 				SodPatchFeature.CODEC);
 		ServerChunkEvents.CHUNK_LOAD.register(SodPatchFeature::onChunkLoad);
 		GroundscapeWorldgenConfig config = GroundscapeWorldgenConfig.current();
-		if (config.enabled()) {
-			BiomeModifications.addFeature(BiomeSelectors.vanilla().and(
+		// Keep the admission feature installed so a runtime enable works without rebuilding biomes.
+		BiomeModifications.addFeature(BiomeSelectors.vanilla().and(
 					BiomeSelectors.foundInOverworld().or(BiomeSelectors.foundInTheNether())),
 					GenerationStep.Decoration.TOP_LAYER_MODIFICATION, NATURAL_SOD_PATCHES);
-		}
 		BuildupGroundscape.LOGGER.info("Natural sod patches: {} (density={}, maximum layers={})",
 				config.enabled() ? "experimental enabled" : "disabled", config.density(), config.maxLayers());
 	}

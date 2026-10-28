@@ -162,7 +162,7 @@ public final class GroundscapeGameTests {
     }
 
     @GameTest(maxTicks = 30)
-    public void supportRemovalDropsAllLayers(GameTestHelper helper) {
+    public void supportRemovalDropsNoLayers(GameTestHelper helper) {
         for (int i = 0; i < GroundscapeBlocks.variants().size(); i++) {
             var variant = GroundscapeBlocks.variants().get(i);
             BlockPos pos = new BlockPos(i + 1, 2, 3);
@@ -175,7 +175,7 @@ public final class GroundscapeGameTests {
         helper.runAfterDelay(2, () -> {
             for (int i = 0; i < GroundscapeBlocks.variants().size(); i++) {
                 helper.assertItemEntityCountIs(GroundscapeBlocks.variants().get(i).patch().asItem(),
-                        new BlockPos(i + 1, 2, 3), 2.0, 5);
+                        new BlockPos(i + 1, 2, 3), 2.0, 0);
             }
             helper.succeed();
         });
@@ -345,9 +345,9 @@ public final class GroundscapeGameTests {
                 BlockState state = block.defaultBlockState();
                 helper.assertValueEqual(state.getMapColor(helper.getLevel(), absolute), vanilla.getMapColor(helper.getLevel(), absolute), "family map color");
                 helper.assertValueEqual(state.getSoundType(), vanilla.getSoundType(), "family sounds");
-                helper.assertValueEqual(state.getDestroySpeed(helper.getLevel(), absolute), vanilla.getDestroySpeed(helper.getLevel(), absolute), "family hardness");
-                helper.assertTrue(state.is(nylium ? BlockTags.MINEABLE_WITH_PICKAXE : BlockTags.MINEABLE_WITH_SHOVEL), "correct mining tag");
-                helper.assertTrue(tool.getDestroySpeed(state) > new ItemStack(Items.STICK).getDestroySpeed(state), "correct tool mines faster");
+                helper.assertValueEqual(state.getDestroySpeed(helper.getLevel(), absolute), (block == variant.patch() ? Blocks.MOSS_CARPET.defaultBlockState() : vanilla).getDestroySpeed(helper.getLevel(), absolute), "material or moss hardness");
+                helper.assertTrue(state.is(block == variant.patch() ? BlockTags.MINEABLE_WITH_HOE : nylium ? BlockTags.MINEABLE_WITH_PICKAXE : BlockTags.MINEABLE_WITH_SHOVEL), "correct mining tag");
+                helper.assertTrue((block == variant.patch() ? new ItemStack(Items.DIAMOND_HOE) : tool).getDestroySpeed(state) > new ItemStack(Items.STICK).getDestroySpeed(state), "correct tool mines faster");
             }
         }
         helper.succeed();
@@ -364,7 +364,7 @@ public final class GroundscapeGameTests {
         for (var variant : GroundscapeBlocks.variants()) {
             for (ItemStack tool : List.of(ItemStack.EMPTY, fortune, silk)) {
                 for (int layers = 1; layers <= 8; layers++) {
-                    assertDrops(helper, variant.patch().defaultBlockState().setValue(BlockStateProperties.LAYERS, layers), absolute, tool, variant.patch(), layers);
+                    assertDrops(helper, variant.patch().defaultBlockState().setValue(BlockStateProperties.LAYERS, layers), absolute, tool, variant.patch(), tool == silk ? layers : 0);
                 }
                 if (variant.family().hasSodBlock()) assertDrops(helper, variant.block().defaultBlockState(), absolute, tool, variant.block(), 1);
                 assertDrops(helper, variant.stairs().defaultBlockState(), absolute, tool, variant.stairs(), 1);

@@ -12,6 +12,7 @@ import java.util.List;
 public class BuildupGroundscapeClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+        com.davidblackcn.client.config.GroundscapeConfigScreen.initialize();
 		var grass = GroundscapeBlocks.get(SurfaceFamily.GRASS);
 		// The native source uses the actual block position and the configured biome blend radius.
 		// It also colors terrain particles; the item tint is generated separately in items/*.json.

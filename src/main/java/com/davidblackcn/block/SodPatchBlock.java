@@ -127,10 +127,15 @@ public final class SodPatchBlock extends Block implements net.minecraft.world.le
 	private static final VoxelShape[] SHAPES = createShapes();
 
 	public SodPatchBlock(BlockBehaviour.Properties properties, Block substrate) {
-		super(properties.isValidSpawn((state, level, pos, entityType) -> false));
+		super(properties.destroyTime(Blocks.MOSS_CARPET.defaultDestroyTime()).isValidSpawn((state, level, pos, entityType) -> false));
 		this.substrate = substrate;
 		registerDefaultState(stateDefinition.any().setValue(LAYERS, 1).setValue(VEGETATION, Vegetation.NONE));
 	}
+
+    @Override
+    protected boolean canBeReplaced(BlockState state, net.minecraft.world.level.material.Fluid fluid) {
+        return fluid.is(net.minecraft.tags.FluidTags.WATER) || super.canBeReplaced(state, fluid);
+    }
 
 	private static VoxelShape[] createShapes() {
 		VoxelShape[] shapes = new VoxelShape[MAX_LAYERS + 1];

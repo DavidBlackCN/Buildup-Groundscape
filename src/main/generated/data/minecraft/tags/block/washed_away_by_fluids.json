@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "buildup_groundscape:grass_sod_patch",
+    "buildup_groundscape:mycelium_sod_patch",
+    "buildup_groundscape:podzol_sod_patch",
+    "buildup_groundscape:crimson_nylium_sod_patch",
+    "buildup_groundscape:warped_nylium_sod_patch",
+    "buildup_groundscape:sand_patch",
+    "buildup_groundscape:dirt_patch",
+    "buildup_groundscape:coarse_dirt_patch",
+    "buildup_groundscape:red_sand_patch",
+    "buildup_groundscape:gravel_patch",
+    "buildup_groundscape:rooted_dirt_patch",
+    "buildup_groundscape:oak_leaves_patch",
+    "buildup_groundscape:spruce_leaves_patch",
+    "buildup_groundscape:birch_leaves_patch",
+    "buildup_groundscape:jungle_leaves_patch",
+    "buildup_groundscape:acacia_leaves_patch",
+    "buildup_groundscape:dark_oak_leaves_patch",
+    "buildup_groundscape:mangrove_leaves_patch",
+    "buildup_groundscape:cherry_leaves_patch",
+    "buildup_groundscape:pale_oak_leaves_patch",
+    "buildup_groundscape:azalea_leaves_patch",
+    "buildup_groundscape:flowering_azalea_leaves_patch",
+    "buildup_groundscape:red_poplar_leaves_patch",
+    "buildup_groundscape:orange_poplar_leaves_patch",
+    "buildup_groundscape:yellow_poplar_leaves_patch"
+  ]
+}

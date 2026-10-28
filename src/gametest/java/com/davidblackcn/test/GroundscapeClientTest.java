@@ -33,6 +33,7 @@ import javax.imageio.ImageIO;
 public final class GroundscapeClientTest implements FabricClientGameTest {
     @Override
     public void runTest(ClientGameTestContext context) {
+        if (System.getProperty("groundscape.configTest") != null) return;
         if (System.getProperty("groundscape.worldgenTest") != null || System.getProperty("groundscape.leafTest") != null) return;
         context.runOnClient(client -> {
             client.options.renderDistance().set(8);
@@ -263,7 +264,7 @@ public final class GroundscapeClientTest implements FabricClientGameTest {
         Path directory = Path.of("").toAbsolutePath().normalize();
         while (directory != null && !Files.exists(directory.resolve("build.gradle"))) directory = directory.getParent();
         require(directory != null, "Cannot locate project directory");
-        Path evidence = directory.getParent().resolve("docs/evidence/vegetation-leaves");
+        Path evidence = directory.getParent().resolve("docs/evidence/config-patch-rules");
         try { Files.createDirectories(evidence); } catch (IOException e) { throw new UncheckedIOException(e); }
         context.takeScreenshot(TestScreenshotOptions.of(name).withSize(1280, 720)
                 .withDestinationDir(evidence).disableCounterPrefix());

@@ -53,6 +53,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		}
 		plantModels();
         leafResources(english, chinese);
+        ConfigTranslations.add(english, chinese);
 		asset("lang/en_us", english);
 		asset("lang/zh_cn", chinese);
 		tags();
@@ -223,7 +224,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 							"modifier", array(object("type", "minecraft:set_count", "count", count),
 									object("type", "minecraft:explosion_decay"))));
 				}
-				entry = object("type", "minecraft:alternatives", "children", alternatives);
+				entry = object("type", "minecraft:alternatives", "condition", "minecraft:tool/can_silk_touch", "children", alternatives);
 			} else if (form.equals("slab")) {
 				entry = object("type", "minecraft:item", "name", id,
 						"modifier", array(object("type", "minecraft:set_count", "count", 2,
@@ -298,7 +299,7 @@ public final class GroundscapeResourceProvider implements DataProvider {
 				all.add(id);
 				familyBlocks.add(id);
 				boolean nylium = family == SurfaceFamily.CRIMSON_NYLIUM || family == SurfaceFamily.WARPED_NYLIUM;
-				(nylium ? pickaxes : shovels).add(id);
+				if (!form.equals("patch")) (nylium ? pickaxes : shovels).add(id);
 			}
 			tag(NAMESPACE, "block", family.id() + "_sod", familyBlocks);
 			tag(NAMESPACE, "item", family.id() + "_sod", familyBlocks);
@@ -317,6 +318,8 @@ public final class GroundscapeResourceProvider implements DataProvider {
 		// Low patches occupy the candidate spawn cell as well as forming a surface below it.
 		for (var leaf : com.davidblackcn.registry.LeafFamily.values()) patches.add(NAMESPACE + ":" + leaf.path());
         tag("minecraft", "block", "prevent_mob_spawning_inside", patches);
+        tag("minecraft", "block", "washed_away_by_fluids", patches);
+        tag("minecraft", "block", "mineable/hoe", patches);
 	}
 
     private static JsonObject nativeJson(String path) {
@@ -450,13 +453,13 @@ public final class GroundscapeResourceProvider implements DataProvider {
             String englishName = java.util.Arrays.stream(family.id().split("_")).map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1)).collect(java.util.stream.Collectors.joining(" "));
             english.addProperty("block." + NAMESPACE + "." + path, englishName + " Leaves Patch");
             chinese.addProperty("block." + NAMESPACE + "." + path, names[family.ordinal()] + "树叶薄层");
-            data("loot_table/blocks/" + path, object("type", "minecraft:block", "pools", array(object("rolls", 1, "entries", array(object("type", "minecraft:alternatives", "children", alternatives))))));
+            data("loot_table/blocks/" + path, object("type", "minecraft:block", "pools", array(object("rolls", 1, "entries", array(object("type", "minecraft:alternatives", "condition", "minecraft:tool/can_silk_touch", "children", alternatives))))));
             shapeless(path, "minecraft:" + family.id() + "_leaves", 1, id, 8);
             shapeless(path + "_to_leaves", id, 8, "minecraft:" + family.id() + "_leaves", 1);
         }
         tag(NAMESPACE, "block", "leaf_patches", leafTag);
         tag(NAMESPACE, "item", "leaf_patches", leafTag);
-        tag("minecraft", "block", "mineable/hoe", leafTag);
+
     }
 
 	private void tag(String namespace, String registry, String name, JsonArray values) {

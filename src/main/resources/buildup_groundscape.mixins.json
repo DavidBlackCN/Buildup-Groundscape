@@ -5,7 +5,8 @@
   "mixins": [
     "ServerPlayerGameModeMixin",
     "VegetationBlockAccessor",
-    "VegetationSupportMixin"
+    "VegetationSupportMixin",
+    "FlowingFluidMixin"
   ],
   "client": [
     "client.MultiPlayerGameModeMixin"

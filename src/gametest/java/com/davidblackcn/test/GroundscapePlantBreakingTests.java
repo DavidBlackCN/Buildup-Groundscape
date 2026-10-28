@@ -59,7 +59,7 @@ public final class GroundscapePlantBreakingTests {
                         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
                         h.assertTrue(player.gameMode.destroyBlock(pos), "second left break uses normal patch removal");
                         h.assertTrue(h.getBlockState(CELL).isAir(), "second break removes the patch");
-                        h.assertItemEntityCountIs(variant.patch().asItem(), CELL, 1.5, mode == GameType.CREATIVE ? 0 : n);
+                        h.assertItemEntityCountIs(variant.patch().asItem(), CELL, 1.5, 0);
                         h.assertItemEntityCountIs(plant.getBlock().asItem(), CELL, 1.5, 0);
                     }
                 }
@@ -90,7 +90,7 @@ public final class GroundscapePlantBreakingTests {
                     h.assertTrue(item.getItem().is(Items.WHEAT_SEEDS), "empty hand only produces native seed loot");
                 }
                 h.assertTrue(player.gameMode.destroyBlock(pos), "bare patch can be broken normally");
-                h.assertItemEntityCountIs(bare.getBlock().asItem(), CELL, 1.5, 5);
+                h.assertItemEntityCountIs(bare.getBlock().asItem(), CELL, 1.5, 0);
             }
         } finally {
             clearItems(h, pos);

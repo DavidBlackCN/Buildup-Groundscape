@@ -166,7 +166,8 @@
               ],
               "name": "buildup_groundscape:mycelium_sod_patch"
             }
-          ]
+          ],
+          "condition": "minecraft:tool/can_silk_touch"
         }
       ],
       "rolls": 1

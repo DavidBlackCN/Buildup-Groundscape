@@ -54,12 +54,14 @@ public enum SurfaceFamily {
 	}
 
 	/** Copy material properties deliberately, without inherited random ticks or vanilla loot. */
-	public BlockBehaviour.Properties properties() {
+	public BlockBehaviour.Properties properties() { return properties(true); }
+
+    public BlockBehaviour.Properties properties(boolean inheritToolRequirement) {
 		BlockBehaviour.Properties properties = BlockBehaviour.Properties.of()
 				.mapColor(vanillaBlock.defaultMapColor())
 				.strength(vanillaBlock.defaultDestroyTime(), vanillaBlock.getExplosionResistance())
 				.sound(vanillaBlock.defaultBlockState().getSoundType());
-		if (vanillaBlock.defaultBlockState().requiresCorrectToolForDrops()) {
+		if (inheritToolRequirement && vanillaBlock.defaultBlockState().requiresCorrectToolForDrops()) {
 			properties.requiresCorrectToolForDrops();
 		}
 		return properties;

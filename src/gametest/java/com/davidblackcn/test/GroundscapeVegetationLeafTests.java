@@ -100,7 +100,10 @@ public final class GroundscapeVegetationLeafTests {
             h.assertFalse(state.is(net.minecraft.tags.BlockTags.LEAVES), "patch is not native canopy");
             h.assertFalse(state.isRandomlyTicking(), "no decay tick");
             h.assertTrue(state.getCollisionShape(level, pos).max(Direction.Axis.Y) == n / 8.0, "exact layer collision");
-            var drops = Block.getDrops(state, level, pos, null, null, ItemStack.EMPTY);
+            var silk = new ItemStack(Items.DIAMOND_HOE);
+            silk.enchant(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH), 1);
+            h.assertTrue(Block.getDrops(state, level, pos, null, null, ItemStack.EMPTY).isEmpty(), "empty hand drops nothing");
+            var drops = Block.getDrops(state, level, pos, null, null, silk);
             h.assertValueEqual(drops.stream().mapToInt(ItemStack::getCount).sum(), n, "one drop per layer");
             h.assertTrue(drops.stream().allMatch(item -> item.is(patch.asItem())), "no sapling or apple drops");
             h.setBlock(CELL.below(), Blocks.AIR);

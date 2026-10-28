@@ -23,9 +23,14 @@ public final class LeafPatchBlock extends Block {
     private static final VoxelShape[] SHAPES = new VoxelShape[9];
     static { for (int i = 1; i <= 8; i++) SHAPES[i] = Block.box(0, 0, 0, 16, i * 2, 16); }
     public LeafPatchBlock(BlockBehaviour.Properties properties) {
-        super(properties.noOcclusion().isValidSpawn((s, l, p, e) -> false));
+        super(properties.destroyTime(Blocks.MOSS_CARPET.defaultDestroyTime()).noOcclusion().isValidSpawn((s, l, p, e) -> false));
         registerDefaultState(stateDefinition.any().setValue(LAYERS, 1));
     }
+    @Override
+    protected boolean canBeReplaced(BlockState state, net.minecraft.world.level.material.Fluid fluid) {
+        return fluid.is(net.minecraft.tags.FluidTags.WATER) || super.canBeReplaced(state, fluid);
+    }
+
     @Override protected VoxelShape getShape(BlockState s, BlockGetter l, BlockPos p, CollisionContext c) { return SHAPES[s.getValue(LAYERS)]; }
     @Override protected VoxelShape getCollisionShape(BlockState s, BlockGetter l, BlockPos p, CollisionContext c) { return SHAPES[s.getValue(LAYERS)]; }
     @Override protected VoxelShape getBlockSupportShape(BlockState s, BlockGetter l, BlockPos p) { return SHAPES[s.getValue(LAYERS)]; }

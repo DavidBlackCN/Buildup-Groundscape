@@ -8,7 +8,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.Strictness;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +16,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-/** Immutable startup settings. Experimental decoration is opt-in and never retro-generates. */
+/** Immutable, validated settings snapshot. Decoration never retro-generates. */
 public record GroundscapeWorldgenConfig(boolean enabled, double density, int maxLayers,
 		double slopeInfluence, double flatCoverage, double layerScale, double heightVariation,
 		Map<String, MaterialSettings> materials, LeafSettings leafPatches) {
@@ -102,12 +101,7 @@ public record GroundscapeWorldgenConfig(boolean enabled, double density, int max
 	}
 
 	public static GroundscapeWorldgenConfig current() {
-		return Startup.SETTINGS;
-	}
-
-	private static final class Startup {
-		private static final GroundscapeWorldgenConfig SETTINGS = load(FabricLoader.getInstance()
-				.getConfigDir().resolve("buildup_groundscape-worldgen.json"));
+		return com.davidblackcn.config.GroundscapeConfigManager.snapshot().config();
 	}
 
 	/** Invalid configuration is preserved for repair; failure always disables generation. */
@@ -129,31 +123,47 @@ public record GroundscapeWorldgenConfig(boolean enabled, double density, int max
 				}
 				object = document.getAsJsonObject();
 			}
-			GroundscapeWorldgenConfig defaults = defaults();
-			boolean enabled = defaults.enabled();
-			if (object.has("enabled")) {
-				var value = object.get("enabled");
-				if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isBoolean()) {
-					throw new IllegalArgumentException("enabled must be a boolean");
-				}
-				enabled = value.getAsBoolean();
-			}
-			double density = number(object, "density", defaults.density());
-			double layers = number(object, "maxLayers", defaults.maxLayers());
-			if (layers != Math.rint(layers) || layers < 1 || layers > 7) {
-				throw new IllegalArgumentException("maxLayers must be an integer between 1 and 7");
-			}
-			return new GroundscapeWorldgenConfig(enabled, density, (int) layers,
-					number(object, "slopeInfluence", defaults.slopeInfluence()),
-					number(object, "flatCoverage", defaults.flatCoverage()),
-					number(object, "layerScale", defaults.layerScale()),
-					number(object, "heightVariation", defaults.heightVariation()), readMaterials(object), readLeaves(object));
+            return parse(object);
 		} catch (IOException | IllegalArgumentException | com.google.gson.JsonParseException exception) {
 			BuildupGroundscape.LOGGER.error("Cannot read worldgen config {}; generation disabled: {}",
 					path, exception.getMessage());
 			return defaults();
 		}
 	}
+
+    public static GroundscapeWorldgenConfig parse(String json) {
+        try (JsonReader reader = new JsonReader(new java.io.StringReader(json))) {
+            reader.setStrictness(Strictness.STRICT);
+            var document = JsonParser.parseReader(reader);
+            if (!document.isJsonObject() || reader.peek() != JsonToken.END_DOCUMENT) throw new IllegalArgumentException("Expected one JSON object");
+            return parse(document.getAsJsonObject());
+        } catch (IOException e) { throw new IllegalArgumentException("Invalid JSON", e); }
+    }
+    public String json() { return new GsonBuilder().setPrettyPrinting().create().toJson(this) + "\n"; }
+    private static GroundscapeWorldgenConfig parse(JsonObject object) {
+        for (String key : object.keySet()) if (!java.util.Set.of("enabled", "density", "maxLayers", "slopeInfluence", "flatCoverage", "layerScale", "heightVariation", "materials", "leafPatches").contains(key))
+            throw new IllegalArgumentException("Unknown setting: " + key);
+
+		GroundscapeWorldgenConfig defaults = defaults();
+		boolean enabled = defaults.enabled();
+		if (object.has("enabled")) {
+			var value = object.get("enabled");
+			if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isBoolean()) {
+				throw new IllegalArgumentException("enabled must be a boolean");
+			}
+			enabled = value.getAsBoolean();
+		}
+		double density = number(object, "density", defaults.density());
+		double layers = number(object, "maxLayers", defaults.maxLayers());
+		if (layers != Math.rint(layers) || layers < 1 || layers > 7) {
+			throw new IllegalArgumentException("maxLayers must be an integer between 1 and 7");
+		}
+		return new GroundscapeWorldgenConfig(enabled, density, (int) layers,
+				number(object, "slopeInfluence", defaults.slopeInfluence()),
+				number(object, "flatCoverage", defaults.flatCoverage()),
+				number(object, "layerScale", defaults.layerScale()),
+				number(object, "heightVariation", defaults.heightVariation()), readMaterials(object), readLeaves(object));
+    }
 
     private static LeafSettings readLeaves(JsonObject root) {
         if (!root.has("leafPatches")) return LeafSettings.defaults();

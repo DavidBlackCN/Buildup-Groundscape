@@ -4,6 +4,8 @@ plugins {
 }
 
 repositories {
+    maven { url = 'https://maven.isxander.dev/releases'; content { includeGroup 'dev.isxander' } }
+    maven { url = 'https://maven.terraformersmc.com/releases'; content { includeGroup 'com.terraformersmc' } }
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -68,6 +70,9 @@ if (providers.gradleProperty('worldgenTest').isPresent()) {
 }
 
 dependencies {
+    // Published YACL contains its required runtime libraries; Kotlin DSL is not used.
+    implementation("dev.isxander:yet-another-config-lib:${project.yacl_version}") { transitive = false }
+    clientCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") { transitive = false }
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -151,4 +156,9 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}
+
+// Focused configuration UI/network regression profile.
+if (providers.gradleProperty("configTest").isPresent()) {
+    loom.runs.clientGameTest { vmArg "-Dgroundscape.configTest=true" }
 }
